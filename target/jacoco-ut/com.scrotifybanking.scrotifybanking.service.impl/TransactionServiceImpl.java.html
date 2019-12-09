@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransactionServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scrotifybanking</a> &gt; <a href="index.source.html" class="el_package">com.scrotifybanking.scrotifybanking.service.impl</a> &gt; <span class="el_source">TransactionServiceImpl.java</span></div><h1>TransactionServiceImpl.java</h1><pre class="source lang-java linenums">package com.scrotifybanking.scrotifybanking.service.impl;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
+import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
+import com.scrotifybanking.scrotifybanking.entity.Account;
+import com.scrotifybanking.scrotifybanking.entity.Transaction;
+import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
+import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
+import com.scrotifybanking.scrotifybanking.service.TransactionService;
+import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
+
+/**
+ * The type Transaction service.
+ */
+@Service
+<span class="fc" id="L25">public class TransactionServiceImpl implements TransactionService {</span>
+
+	@Autowired
+	private TransactionRepository transactionRepository;
+
+	@Autowired
+	private AccountRepository accountRepository;
+
+	/**
+	 * check balance before withdraw
+	 *
+	 * @param custId
+	 * @param amount
+	 * @param accountStatus
+	 * @param accountType
+	 * @return
+	 */
+	@Override
+	public boolean checkMinimumBalance(Long custId, String accountStatus, String accountType, double amount) {
+<span class="fc" id="L44">		double existingAmount = accountRepository.findByAccountBalance(custId, accountStatus, accountType);</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		return (existingAmount &gt; amount);</span>
+	}
+
+	/**
+	 * Check maintenance balance after withdraw
+	 *
+	 * @param custId
+	 * @param amount
+	 * @param accountStatus
+	 * @param accountType
+	 * @return
+	 */
+	@Override
+	public boolean checkManintenanceBalance(Long custId, String accountStatus, String accountType, double amount,
+			double maintainBalance) {
+<span class="fc" id="L60">		double existingAmount = accountRepository.findByAccountBalance(custId, accountStatus, accountType);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		if (existingAmount &gt; (maintainBalance + amount)) {</span>
+<span class="fc" id="L62">			return true;</span>
+		}
+<span class="fc" id="L64">		return false;</span>
+	}
+
+	@Override
+	public ApiResponse transferFund(Long custId, String toAccountNo, double amount, String accountStatus,
+			String accountType) {
+<span class="fc" id="L70">		ApiResponse response = new ApiResponse();</span>
+<span class="fc" id="L71">		Account payeeAccount = null;</span>
+<span class="fc" id="L72">		Optional&lt;Account&gt; accountOptional = accountRepository.findById(Long.parseLong(toAccountNo));</span>
+<span class="fc" id="L73">		Account customerAccount = accountRepository.findByCustomerByAccount(custId, accountStatus, accountType);</span>
+
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">		if (accountOptional.isPresent()) {</span>
+<span class="fc" id="L76">			payeeAccount = accountOptional.get();</span>
+<span class="fc" id="L77">			double balanceAmount = customerAccount.getAvailableBalance() - amount;</span>
+<span class="fc" id="L78">			customerAccount.setAvailableBalance(balanceAmount);</span>
+
+<span class="fc" id="L80">			double payeeAccountBalance = payeeAccount.getAvailableBalance();</span>
+<span class="fc" id="L81">			payeeAccountBalance = payeeAccountBalance + amount;</span>
+<span class="fc" id="L82">			payeeAccount.setAvailableBalance(payeeAccountBalance);</span>
+
+<span class="fc" id="L84">			Transaction customertransaction = new Transaction();</span>
+<span class="fc" id="L85">			customertransaction.setAccountNo(customerAccount);</span>
+<span class="fc" id="L86">			customertransaction.setAmount(amount);</span>
+<span class="fc" id="L87">			customertransaction.setTransactionDate(LocalDate.now());</span>
+<span class="fc" id="L88">			customertransaction.setTransactionType(ScrotifyConstant.DEBIT_TRANSACTION);</span>
+<span class="fc" id="L89">			customertransaction.setPayeeNo(Long.parseLong(toAccountNo));</span>
+
+<span class="fc" id="L91">			Transaction payeeTransaction = new Transaction();</span>
+<span class="fc" id="L92">			payeeTransaction.setAccountNo(payeeAccount);</span>
+<span class="fc" id="L93">			payeeTransaction.setAmount(amount);</span>
+<span class="fc" id="L94">			payeeTransaction.setTransactionDate(LocalDate.now());</span>
+<span class="fc" id="L95">			payeeTransaction.setTransactionType(ScrotifyConstant.CREDIT_TRANSACTION);</span>
+<span class="fc" id="L96">			payeeTransaction.setPayeeNo(customertransaction.getAccountNo().getAccountNo());</span>
+
+<span class="fc" id="L98">			transactionRepository.save(customertransaction);</span>
+<span class="fc" id="L99">			transactionRepository.save(payeeTransaction);</span>
+<span class="fc" id="L100">			accountRepository.save(payeeAccount);</span>
+<span class="fc" id="L101">			accountRepository.save(customerAccount);</span>
+<span class="fc" id="L102">			response.setStatusCode(ScrotifyConstant.SUCCESS_CODE);</span>
+		}
+<span class="fc" id="L104">		return response;</span>
+	}
+
+	/**
+	 * Description: This method is used to get the monthly transactions.
+	 *
+	 * @param transactionStatementDto
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public List&lt;TransactionStatementResponseDto&gt; getTransactionStatement(
+			TransactionStatementDto transactionStatementDto, String accountStatus, String accountType)
+			throws Exception {
+<span class="fc" id="L118">		TransactionStatementResponseDto transactionStatementResponseDto = null;</span>
+<span class="fc" id="L119">		Integer month = transactionStatementDto.getMonth();</span>
+<span class="fc" id="L120">		Integer year = transactionStatementDto.getYear();</span>
+<span class="fc" id="L121">		LocalDate startDate = LocalDate.parse(year + &quot;-&quot; + month + &quot;-&quot; + &quot;01&quot;);</span>
+<span class="fc" id="L122">		LocalDate endDate = LocalDate.parse(year + &quot;-&quot; + month + &quot;-&quot; + &quot;30&quot;);</span>
+<span class="fc" id="L123">		Account customerId = accountRepository.findByCustomerByAccount(transactionStatementDto.getCustomerId(),</span>
+				accountStatus, accountType);
+<span class="fc" id="L125">		List&lt;TransactionStatementResponseDto&gt; monthlyTransaction = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">		if (customerId != null) {</span>
+<span class="fc" id="L127">			Account accountNo = new Account();</span>
+<span class="fc" id="L128">			accountNo.setAccountNo(customerId.getAccountNo());</span>
+<span class="fc" id="L129">			List&lt;Transaction&gt; transactions = transactionRepository.getAllByAccountNoAndTransactionDateBetween(accountNo,</span>
+					startDate, endDate);
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">			for (Transaction transact : transactions) {</span>
+<span class="nc" id="L132">				transactionStatementResponseDto = new TransactionStatementResponseDto();</span>
+<span class="nc" id="L133">				transactionStatementResponseDto.setTransactionId(transact.getTransactionId());</span>
+<span class="nc" id="L134">				transactionStatementResponseDto.setAmount(transact.getAmount());</span>
+<span class="nc" id="L135">				transactionStatementResponseDto.setTransactionDate(transact.getTransactionDate());</span>
+<span class="nc" id="L136">				transactionStatementResponseDto.setTransactionType(transact.getTransactionType());</span>
+<span class="nc" id="L137">				monthlyTransaction.add(transactionStatementResponseDto);</span>
+<span class="nc" id="L138">				transactionStatementResponseDto.setMessage(&quot;transactions&quot;);</span>
+<span class="nc" id="L139">				transactionStatementResponseDto.setStatusCode(201);</span>
+
+<span class="nc" id="L141">			}</span>
+		}
+
+<span class="fc" id="L144">		return monthlyTransaction;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

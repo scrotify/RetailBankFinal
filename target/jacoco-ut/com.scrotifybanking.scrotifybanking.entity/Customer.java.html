@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Customer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scrotifybanking</a> &gt; <a href="index.source.html" class="el_package">com.scrotifybanking.scrotifybanking.entity</a> &gt; <span class="el_source">Customer.java</span></div><h1>Customer.java</h1><pre class="source lang-java linenums">package com.scrotifybanking.scrotifybanking.entity;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+/**
+ * The type Customer.
+ */
+@Table(name = &quot;customer&quot;)
+@Entity
+<span class="fc" id="L26">@NoArgsConstructor</span>
+<span class="nc" id="L27">@AllArgsConstructor</span>
+@SequenceGenerator(name = &quot;seq&quot;, initialValue = 1000)
+public class Customer implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;seq&quot;)
+	@Column(name = &quot;customer_id&quot;)
+	private Long customerId;
+
+	@Column(name = &quot;customer_name&quot;, nullable = false)
+	private String customerName;
+
+	@Column(name = &quot;customer_email&quot;)
+	private String customerEmail;
+
+	@Column(name = &quot;customer_password&quot;)
+	private String customerPassword;
+
+	@Column(name = &quot;account_type&quot;)
+	private String accountType;
+
+	@Column(name = &quot;customer_dob&quot;)
+	private LocalDate customerDob;
+
+	@Column(name = &quot;customer_mobileno&quot;)
+	private Long customerMobileNo;
+
+	@Column(name = &quot;customer_city&quot;)
+	private String customerCity;
+
+	@OneToMany(mappedBy = &quot;customer&quot;, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List&lt;Account&gt; accountList;
+
+	public Long getCustomerId() {
+<span class="fc" id="L62">		return customerId;</span>
+	}
+
+	public void setCustomerId(Long customerId) {
+<span class="fc" id="L66">		this.customerId = customerId;</span>
+<span class="fc" id="L67">	}</span>
+
+	public String getCustomerName() {
+<span class="fc" id="L70">		return customerName;</span>
+	}
+
+	public void setCustomerName(String customerName) {
+<span class="fc" id="L74">		this.customerName = customerName;</span>
+<span class="fc" id="L75">	}</span>
+
+	public String getCustomerEmail() {
+<span class="nc" id="L78">		return customerEmail;</span>
+	}
+
+	public void setCustomerEmail(String customerEmail) {
+<span class="fc" id="L82">		this.customerEmail = customerEmail;</span>
+<span class="fc" id="L83">	}</span>
+
+	public String getCustomerPassword() {
+<span class="fc" id="L86">		return customerPassword;</span>
+	}
+
+	public void setCustomerPassword(String customerPassword) {
+<span class="fc" id="L90">		this.customerPassword = customerPassword;</span>
+<span class="fc" id="L91">	}</span>
+
+	public String getAccountType() {
+<span class="fc" id="L94">		return accountType;</span>
+	}
+
+	public void setAccountType(String accountType) {
+<span class="fc" id="L98">		this.accountType = accountType;</span>
+<span class="fc" id="L99">	}</span>
+
+	public LocalDate getCustomerDob() {
+<span class="nc" id="L102">		return customerDob;</span>
+	}
+
+	public void setCustomerDob(LocalDate customerDob) {
+<span class="fc" id="L106">		this.customerDob = customerDob;</span>
+<span class="fc" id="L107">	}</span>
+
+	public Long getCustomerMobileNo() {
+<span class="nc" id="L110">		return customerMobileNo;</span>
+	}
+
+	public void setCustomerMobileNo(Long customerMobileNo) {
+<span class="fc" id="L114">		this.customerMobileNo = customerMobileNo;</span>
+<span class="fc" id="L115">	}</span>
+
+	public String getCustomerCity() {
+<span class="nc" id="L118">		return customerCity;</span>
+	}
+
+	public void setCustomerCity(String customerCity) {
+<span class="fc" id="L122">		this.customerCity = customerCity;</span>
+<span class="fc" id="L123">	}</span>
+
+	public List&lt;Account&gt; getAccountList() {
+<span class="nc" id="L126">		return accountList;</span>
+	}
+
+	public void setAccountList(List&lt;Account&gt; accountList) {
+<span class="nc" id="L130">		this.accountList = accountList;</span>
+<span class="nc" id="L131">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

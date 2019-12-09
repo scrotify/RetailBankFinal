@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Account.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scrotifybanking</a> &gt; <a href="index.source.html" class="el_package">com.scrotifybanking.scrotifybanking.entity</a> &gt; <span class="el_source">Account.java</span></div><h1>Account.java</h1><pre class="source lang-java linenums">package com.scrotifybanking.scrotifybanking.entity;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+/**
+ * The type Account.
+ */
+@Entity
+@Table(name = &quot;account&quot;)
+<span class="fc" id="L27">@NoArgsConstructor</span>
+<span class="nc" id="L28">@AllArgsConstructor</span>
+@SequenceGenerator(name = &quot;seq&quot;, initialValue = 100000)
+public class Account implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;seq&quot;)
+	@Column(name = &quot;account_no&quot;)
+	private Long accountNo;
+
+	@Column(name = &quot;account_type&quot;)
+	private String accountType;
+
+	@Column(name = &quot;account_status&quot;)
+	private String accountStatus;
+
+	@Column(name = &quot;available_balance&quot;)
+	private Double availableBalance;
+
+	// @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne
+	@JoinColumn(name = &quot;customerId&quot;)
+	private Customer customer;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = &quot;accountNo&quot;)
+	private List&lt;Transaction&gt; transactionList;
+
+	/**
+	 * Gets account no.
+	 *
+	 * @return the account no
+	 */
+	public Long getAccountNo() {
+<span class="fc" id="L61">		return accountNo;</span>
+	}
+
+	/**
+	 * Sets account no.
+	 *
+	 * @param accountNo the account no
+	 */
+	public void setAccountNo(Long accountNo) {
+<span class="fc" id="L70">		this.accountNo = accountNo;</span>
+<span class="fc" id="L71">	}</span>
+
+	/**
+	 * Gets account type.
+	 *
+	 * @return the account type
+	 */
+	public String getAccountType() {
+<span class="nc" id="L79">		return accountType;</span>
+	}
+
+	/**
+	 * Sets account type.
+	 *
+	 * @param accountType the account type
+	 */
+	public void setAccountType(String accountType) {
+<span class="fc" id="L88">		this.accountType = accountType;</span>
+<span class="fc" id="L89">	}</span>
+
+	/**
+	 * Gets account status.
+	 *
+	 * @return the account status
+	 */
+	public String getAccountStatus() {
+<span class="nc" id="L97">		return accountStatus;</span>
+	}
+
+	/**
+	 * Sets account status.
+	 *
+	 * @param accountStatus the account status
+	 */
+	public void setAccountStatus(String accountStatus) {
+<span class="fc" id="L106">		this.accountStatus = accountStatus;</span>
+<span class="fc" id="L107">	}</span>
+
+	/**
+	 * Gets available balance.
+	 *
+	 * @return the available balance
+	 */
+	public Double getAvailableBalance() {
+<span class="fc" id="L115">		return availableBalance;</span>
+	}
+
+	/**
+	 * Sets available balance.
+	 *
+	 * @param availableBalance the available balance
+	 */
+	public void setAvailableBalance(Double availableBalance) {
+<span class="fc" id="L124">		this.availableBalance = availableBalance;</span>
+<span class="fc" id="L125">	}</span>
+
+	/**
+	 * Gets customer.
+	 *
+	 * @return the customer
+	 */
+	public Customer getCustomer() {
+<span class="nc" id="L133">		return customer;</span>
+	}
+
+	/**
+	 * Sets customer.
+	 *
+	 * @param customer the customer
+	 */
+	public void setCustomer(Customer customer) {
+<span class="fc" id="L142">		this.customer = customer;</span>
+<span class="fc" id="L143">	}</span>
+
+	/**
+	 * Gets transaction list.
+	 *
+	 * @return the transaction list
+	 */
+	public List&lt;Transaction&gt; getTransactionList() {
+<span class="nc" id="L151">		return transactionList;</span>
+	}
+
+	/**
+	 * Sets transaction list.
+	 *
+	 * @param transactionList the transaction list
+	 */
+	public void setTransactionList(List&lt;Transaction&gt; transactionList) {
+<span class="fc" id="L160">		this.transactionList = transactionList;</span>
+<span class="fc" id="L161">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

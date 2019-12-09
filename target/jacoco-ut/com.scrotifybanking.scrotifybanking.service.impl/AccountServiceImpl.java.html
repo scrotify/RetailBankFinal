@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scrotifybanking</a> &gt; <a href="index.source.html" class="el_package">com.scrotifybanking.scrotifybanking.service.impl</a> &gt; <span class="el_source">AccountServiceImpl.java</span></div><h1>AccountServiceImpl.java</h1><pre class="source lang-java linenums">package com.scrotifybanking.scrotifybanking.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.scrotifybanking.scrotifybanking.entity.Account;
+import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
+import com.scrotifybanking.scrotifybanking.service.AccountService;
+
+/**
+ * The type Account service.
+ */
+<span class="nc" id="L14">public class AccountServiceImpl implements AccountService {</span>
+
+	@Autowired
+	private AccountRepository accountRepository;
+
+	/**
+	 * findAllByAccount except current cust
+	 *
+	 * @param custId        the cust id
+	 * @param accountStatus the account status
+	 * @param accountType   the account type
+	 * @return
+	 */
+	@Override
+	public List&lt;Account&gt; findAllByAccountNotCustomer(String custId, String accountStatus, String accountType) {
+<span class="nc" id="L29">		return accountRepository.findAllByAccountNotCustomer(Long.parseLong(custId), accountStatus, accountType);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

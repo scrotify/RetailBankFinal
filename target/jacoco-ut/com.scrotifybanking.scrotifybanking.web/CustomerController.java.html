@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scrotifybanking</a> &gt; <a href="index.source.html" class="el_package">com.scrotifybanking.scrotifybanking.web</a> &gt; <span class="el_source">CustomerController.java</span></div><h1>CustomerController.java</h1><pre class="source lang-java linenums">package com.scrotifybanking.scrotifybanking.web;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.scrotifybanking.scrotifybanking.dto.AccountSummaryResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.CustomerRequestDto;
+import com.scrotifybanking.scrotifybanking.dto.CustomerResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
+import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.response.AccountNosDto;
+import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
+import com.scrotifybanking.scrotifybanking.entity.Account;
+import com.scrotifybanking.scrotifybanking.exception.CustomException;
+import com.scrotifybanking.scrotifybanking.exception.MaintainBalanceException;
+import com.scrotifybanking.scrotifybanking.exception.MinimumBalanceNotFoundException;
+import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
+import com.scrotifybanking.scrotifybanking.repository.CustomerRepository;
+import com.scrotifybanking.scrotifybanking.service.CustomerService;
+import com.scrotifybanking.scrotifybanking.service.TransactionService;
+import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
+
+/**
+ * The type Customer controller.
+ */
+@RestController
+@RequestMapping(&quot;/customers&quot;)
+@CrossOrigin(allowedHeaders = &quot;*&quot;, origins = &quot;*&quot;)
+<span class="fc" id="L45">public class CustomerController {</span>
+
+	/**
+	 * The Customer service.
+	 */
+	@Autowired
+	CustomerService customerService;
+	/**
+	 * The Customer repository.
+	 */
+	@Autowired
+	CustomerRepository customerRepository;
+	@Autowired
+	private AccountRepository accountRepository;
+	@Autowired
+	private TransactionService transactionService;
+
+	/**
+	 * Fund transfer response entity.
+	 *
+	 * @param custId         the cust id
+	 * @param toAccountNo    the to account no
+	 * @param fundRequestDto the fund request dto
+	 * @return the response entity
+	 * @throws MinimumBalanceNotFoundException the minimum balance not found
+	 *                                         exception
+	 * @throws MaintainBalanceException        the maintain balance exception
+	 */
+	@PostMapping(&quot;/{custId}/accounts/{toAccountNo}&quot;)
+	public ResponseEntity&lt;ApiResponse&gt; fundTransfer(@PathVariable String custId, @PathVariable String toAccountNo,
+			@RequestBody @Valid FundRequestDto fundRequestDto) {
+
+<span class="fc" id="L77">		boolean checkMinimumBalance = transactionService.checkMinimumBalance(Long.parseLong(custId),</span>
+				ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE,
+<span class="fc" id="L79">				Double.parseDouble(fundRequestDto.getAmount()));</span>
+<span class="fc" id="L80">		ApiResponse response = new ApiResponse();</span>
+<span class="fc" id="L81">		response.setStatusCode(ScrotifyConstant.TRANSACTION_FAILED);</span>
+<span class="fc" id="L82">		response.setMessage(ScrotifyConstant.FUND_TRANSFER_FAILED);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">		if (checkMinimumBalance) {</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">			if (transactionService.checkManintenanceBalance(Long.parseLong(custId),</span>
+					ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE,
+<span class="fc" id="L86">					Double.parseDouble(fundRequestDto.getAmount()), ScrotifyConstant.MINIMUM_BALANCE_MAINTAIN)) {</span>
+<span class="fc" id="L87">				response = transactionService.transferFund(Long.parseLong(custId), toAccountNo,</span>
+<span class="fc" id="L88">						Double.parseDouble(fundRequestDto.getAmount()), ScrotifyConstant.ACCOUNT_ACTIVE_STATUS,</span>
+						ScrotifyConstant.ACCOUNT_TYPE);
+<span class="fc" id="L90">				response.setMessage(ScrotifyConstant.FUND_TRANSFER_SUCCESS);</span>
+<span class="fc" id="L91">				return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</span>
+			} else {
+<span class="fc" id="L93">				throw new MinimumBalanceNotFoundException(ScrotifyConstant.MINIMUM_BALANCE_FAILED);</span>
+			}
+		} else {
+<span class="fc" id="L96">			throw new MaintainBalanceException(ScrotifyConstant.MAINTAIN_BALANCE_FAILED);</span>
+		}
+	}
+
+	/**
+	 * get list of accounts except current customer
+	 *
+	 * @param custId the cust id
+	 * @return all account nos
+	 * @throws CustomException the custom exception
+	 */
+	@GetMapping(&quot;/{custId}/accounts&quot;)
+	public ResponseEntity&lt;AccountNosDto&gt; getAllAccountNos(@PathVariable String custId) {
+
+<span class="fc" id="L110">		AccountNosDto accountNosDtos = new AccountNosDto();</span>
+<span class="fc" id="L111">		List&lt;Account&gt; accounts = accountRepository.findAllByAccountNotCustomer(Long.parseLong(custId),</span>
+				ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE);
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">		if (!accounts.isEmpty()) {</span>
+<span class="fc" id="L114">			List&lt;Long&gt; accountNos = accounts.stream().map(Account::getAccountNo).collect(Collectors.toList());</span>
+<span class="fc" id="L115">			accountNosDtos.setAccountNos(accountNos);</span>
+<span class="fc" id="L116">		} else {</span>
+<span class="nc" id="L117">			throw new CustomException(ScrotifyConstant.CUSTOMER_ID_NOT_FOUND);</span>
+		}
+<span class="fc" id="L119">		return new ResponseEntity&lt;&gt;(accountNosDtos, HttpStatus.OK);</span>
+	}
+
+	/**
+	 * Gets transaction statement.
+	 *
+	 * @param transactionStatementDto the transaction statement dto
+	 * @return transaction statement
+	 * @throws Exception the exception
+	 */
+	@PostMapping(&quot;/transactions&quot;)
+	public List&lt;TransactionStatementResponseDto&gt; getTransactionStatement(
+			@RequestBody TransactionStatementDto transactionStatementDto) throws Exception {
+<span class="fc" id="L132">		return transactionService.getTransactionStatement(transactionStatementDto,</span>
+				ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE);
+
+	}
+
+	/**
+	 * Register customer customer response dto.
+	 *
+	 * @param customerRequestDto the customer request dto
+	 * @return the customer response dto
+	 */
+
+	@PostMapping
+	public CustomerResponseDto registerCustomer(@RequestBody CustomerRequestDto customerRequestDto) {
+<span class="fc" id="L146">		return customerService.registerCustomer(customerRequestDto);</span>
+	}
+
+	/**
+	 * Login customer response entity.
+	 *
+	 * @param loginDto the login dto
+	 * @return the response entity
+	 */
+
+	@PostMapping(&quot;/{customerId}/{password}&quot;)
+	public ResponseEntity&lt;LoginResponseDto&gt; loginCustomer(@RequestBody LoginDto loginDto) {
+<span class="fc" id="L158">		return new ResponseEntity&lt;&gt;(customerService.loginCustomer(loginDto), HttpStatus.OK);</span>
+	}
+
+	/**
+	 * Last transaction response entity.
+	 *
+	 * @param customerId the customer id
+	 * @return the response entity
+	 */
+
+	@GetMapping(&quot;/{customerId}&quot;)
+	public ResponseEntity&lt;AccountSummaryResponseDto&gt; lastTransaction(@PathVariable Long customerId) {
+<span class="fc" id="L170">		return new ResponseEntity&lt;&gt;(customerService.accountSummary(customerId), HttpStatus.OK);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

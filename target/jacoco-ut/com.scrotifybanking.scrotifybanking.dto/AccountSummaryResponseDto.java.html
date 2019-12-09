@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountSummaryResponseDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scrotifybanking</a> &gt; <a href="index.source.html" class="el_package">com.scrotifybanking.scrotifybanking.dto</a> &gt; <span class="el_source">AccountSummaryResponseDto.java</span></div><h1>AccountSummaryResponseDto.java</h1><pre class="source lang-java linenums">package com.scrotifybanking.scrotifybanking.dto;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+/**
+ * The type Account summary response dto.
+ */
+<span class="fc" id="L11">@NoArgsConstructor</span>
+<span class="nc" id="L12">@AllArgsConstructor</span>
+public class AccountSummaryResponseDto {
+
+	private String message;
+	private Integer statusCode;
+	private Long accountNumber;
+	private Double balance;
+	private String name;
+	private List&lt;TransactionDto&gt; transactions;
+
+	/**
+	 * Gets status message.
+	 *
+	 * @return the status message
+	 */
+	public String getMessage() {
+<span class="fc" id="L28">		return message;</span>
+	}
+
+	/**
+	 * Sets status message.
+	 *
+	 * @param statusMessage the status message
+	 */
+	public void setMessage(String message) {
+<span class="fc" id="L37">		this.message = message;</span>
+<span class="fc" id="L38">	}</span>
+
+	/**
+	 * Gets status code.
+	 *
+	 * @return the status code
+	 */
+	public Integer getStatusCode() {
+<span class="nc" id="L46">		return statusCode;</span>
+	}
+
+	/**
+	 * Sets status code.
+	 *
+	 * @param statusCode the status code
+	 */
+	public void setStatusCode(Integer statusCode) {
+<span class="fc" id="L55">		this.statusCode = statusCode;</span>
+<span class="fc" id="L56">	}</span>
+
+	/**
+	 * Gets account number.
+	 *
+	 * @return the account number
+	 */
+	public Long getAccountNumber() {
+<span class="nc" id="L64">		return accountNumber;</span>
+	}
+
+	/**
+	 * Sets account number.
+	 *
+	 * @param accountNumber the account number
+	 */
+	public void setAccountNumber(Long accountNumber) {
+<span class="fc" id="L73">		this.accountNumber = accountNumber;</span>
+<span class="fc" id="L74">	}</span>
+
+	/**
+	 * Gets balance.
+	 *
+	 * @return the balance
+	 */
+	public Double getBalance() {
+<span class="nc" id="L82">		return balance;</span>
+	}
+
+	/**
+	 * Sets balance.
+	 *
+	 * @param balance the balance
+	 */
+	public void setBalance(Double balance) {
+<span class="fc" id="L91">		this.balance = balance;</span>
+<span class="fc" id="L92">	}</span>
+
+	/**
+	 * Gets name.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+<span class="nc" id="L100">		return name;</span>
+	}
+
+	/**
+	 * Sets name.
+	 *
+	 * @param name the name
+	 */
+	public void setName(String name) {
+<span class="fc" id="L109">		this.name = name;</span>
+<span class="fc" id="L110">	}</span>
+
+	/**
+	 * Gets transactions.
+	 *
+	 * @return the transactions
+	 */
+	public List&lt;TransactionDto&gt; getTransactions() {
+<span class="nc" id="L118">		return transactions;</span>
+	}
+
+	/**
+	 * Sets transactions.
+	 *
+	 * @param transactions the transactions
+	 */
+	public void setTransactions(List&lt;TransactionDto&gt; transactions) {
+<span class="fc" id="L127">		this.transactions = transactions;</span>
+<span class="fc" id="L128">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

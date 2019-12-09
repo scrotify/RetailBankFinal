@@ -1,0 +1,6 @@
+com\scrotifybanking\scrotifybanking\ScrotifybankingApplicationTests.class
+com\scrotifybanking\scrotifybanking\service\TransactionServiceImplTest.class
+com\scrotifybanking\scrotifybanking\web\CustomerControllerLoginTest.class
+com\scrotifybanking\scrotifybanking\service\FundTransferServiceTest.class
+com\scrotifybanking\scrotifybanking\service\CustomerServiceTest.class
+com\scrotifybanking\scrotifybanking\web\CustomerControllerTest.class

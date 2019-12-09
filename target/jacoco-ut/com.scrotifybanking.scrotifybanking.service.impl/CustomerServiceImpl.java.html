@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scrotifybanking</a> &gt; <a href="index.source.html" class="el_package">com.scrotifybanking.scrotifybanking.service.impl</a> &gt; <span class="el_source">CustomerServiceImpl.java</span></div><h1>CustomerServiceImpl.java</h1><pre class="source lang-java linenums">package com.scrotifybanking.scrotifybanking.service.impl;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.scrotifybanking.scrotifybanking.dto.AccountSummaryResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.CustomerRequestDto;
+import com.scrotifybanking.scrotifybanking.dto.CustomerResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.TransactionDto;
+import com.scrotifybanking.scrotifybanking.entity.Account;
+import com.scrotifybanking.scrotifybanking.entity.Customer;
+import com.scrotifybanking.scrotifybanking.entity.Transaction;
+import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
+import com.scrotifybanking.scrotifybanking.repository.CustomerRepository;
+import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
+import com.scrotifybanking.scrotifybanking.service.CustomerService;
+import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
+
+/**
+ * The type Customer service.
+ */
+@Service
+<span class="fc" id="L31">public class CustomerServiceImpl implements CustomerService {</span>
+
+	/**
+	 * The Customer repository.
+	 */
+	@Autowired
+	CustomerRepository customerRepository;
+
+	/**
+	 * The Account repository.
+	 */
+	@Autowired
+	AccountRepository accountRepository;
+
+	/**
+	 * The Transaction repository.
+	 */
+	@Autowired
+	TransactionRepository transactionRepository;
+
+	/**
+	 * This is the method to register new customer.
+	 * 
+	 * @param customerRequestDto
+	 * @return
+	 */
+	@Override
+	public CustomerResponseDto registerCustomer(CustomerRequestDto customerRequestDto) {
+<span class="fc" id="L59">		CustomerResponseDto customerResponseDto = new CustomerResponseDto();</span>
+<span class="fc" id="L60">		LocalDate birthDate = customerRequestDto.getDob();</span>
+<span class="fc" id="L61">		LocalDate currentDate = LocalDate.now();</span>
+<span class="fc" id="L62">		Integer calculateAge = Period.between(birthDate, currentDate).getYears();</span>
+<span class="fc" id="L63">		Customer customers = customerRepository.findByCustomerMobileNo(customerRequestDto.getPhone());</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		if (customers != null) {</span>
+<span class="fc" id="L65">			customerResponseDto.setMessage(ScrotifyConstant.FAILURE_REGISTRATION_MESSAGE);</span>
+<span class="fc" id="L66">			customerResponseDto.setStatusCode(ScrotifyConstant.FAILURE_REGISTRATION_CODE);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">		} else if (customerRequestDto.getAccountType().equalsIgnoreCase(ScrotifyConstant.ACCOUNT_TYPE)</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">				&amp;&amp; calculateAge &gt;= ScrotifyConstant.AGE_LIMIT) {</span>
+<span class="fc" id="L69">			Customer customer = new Customer();</span>
+<span class="fc" id="L70">			customer.setAccountType(customerRequestDto.getAccountType());</span>
+<span class="fc" id="L71">			customer.setCustomerCity(customerRequestDto.getCity());</span>
+<span class="fc" id="L72">			customer.setCustomerDob(customerRequestDto.getDob());</span>
+<span class="fc" id="L73">			customer.setCustomerEmail(customerRequestDto.getEmailId());</span>
+<span class="fc" id="L74">			customer.setCustomerName(customerRequestDto.getName());</span>
+<span class="fc" id="L75">			customer.setCustomerPassword(customerRequestDto.getPassword());</span>
+<span class="fc" id="L76">			customer.setCustomerMobileNo(customerRequestDto.getPhone());</span>
+<span class="fc" id="L77">			customerRepository.save(customer);</span>
+<span class="fc" id="L78">			Account account = new Account();</span>
+<span class="fc" id="L79">			account.setAccountStatus(ScrotifyConstant.ACCOUNT_ACTIVE_STATUS);</span>
+<span class="fc" id="L80">			account.getAccountNo();</span>
+<span class="fc" id="L81">			account.setCustomer(customer);</span>
+<span class="fc" id="L82">			account.setAccountType(customer.getAccountType());</span>
+<span class="fc" id="L83">			account.setAvailableBalance(ScrotifyConstant.AMOUNT);</span>
+<span class="fc" id="L84">			accountRepository.save(account);</span>
+<span class="fc" id="L85">			customerResponseDto.setCustomerId(customer.getCustomerId());</span>
+<span class="fc" id="L86">			customerResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);</span>
+<span class="fc" id="L87">			customerResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);</span>
+<span class="fc" id="L88">		} else {</span>
+<span class="fc" id="L89">			customerResponseDto.setMessage(ScrotifyConstant.FAILURE_MESSAGE);</span>
+<span class="fc" id="L90">			customerResponseDto.setStatusCode(ScrotifyConstant.FAILURE_CODE);</span>
+		}
+<span class="fc" id="L92">		return customerResponseDto;</span>
+	}
+
+	/**
+	 * This method is for customer login.
+	 * 
+	 * @param loginDto
+	 * @return
+	 */
+	@Override
+	public LoginResponseDto loginCustomer(LoginDto loginDto) {
+<span class="fc" id="L103">		LoginResponseDto loginResponseDto = new LoginResponseDto();</span>
+<span class="fc" id="L104">		Long customerId = loginDto.getCustId();</span>
+<span class="fc" id="L105">		String password = loginDto.getPassword();</span>
+<span class="fc" id="L106">		Optional&lt;Customer&gt; customer = customerRepository.findByCustomerId(customerId);</span>
+<span class="fc bfc" id="L107" title="All 4 branches covered.">		if (customer.isPresent() &amp;&amp; customer.get().getCustomerPassword().equals(password)) {</span>
+<span class="fc" id="L108">			loginResponseDto.setCustomerId(customer.get().getCustomerId());</span>
+<span class="fc" id="L109">			loginResponseDto.setName(customer.get().getCustomerName());</span>
+<span class="fc" id="L110">			loginResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);</span>
+<span class="fc" id="L111">			loginResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);</span>
+
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		} else if (!customer.isPresent()) {</span>
+<span class="fc" id="L114">			loginResponseDto.setStatusCode(ScrotifyConstant.NOT_FOUND_CODE);</span>
+<span class="fc" id="L115">			loginResponseDto.setMessage(ScrotifyConstant.INVALID_MESSAGE);</span>
+		} else {
+<span class="fc" id="L117">			loginResponseDto.setStatusCode(ScrotifyConstant.FAILURE_CODE);</span>
+<span class="fc" id="L118">			loginResponseDto.setMessage(ScrotifyConstant.INVALID_MESSAGE);</span>
+		}
+<span class="fc" id="L120">		return loginResponseDto;</span>
+	}
+
+	/**
+	 * This method is used to see the transaction details of customer.
+	 * 
+	 * @param customerId
+	 * @return
+	 */
+	@Override
+	public AccountSummaryResponseDto accountSummary(Long customerId) {
+<span class="fc" id="L131">		AccountSummaryResponseDto accountSummaryResponseDto = new AccountSummaryResponseDto();</span>
+<span class="fc" id="L132">		Optional&lt;Customer&gt; customer = customerRepository.findByCustomerId(customerId);</span>
+<span class="fc" id="L133">		Optional&lt;Account&gt; account = accountRepository.findByCustomer(customer);</span>
+<span class="fc" id="L134">		List&lt;Transaction&gt; transactions = transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(account);</span>
+<span class="fc" id="L135">		List&lt;TransactionDto&gt; listTransaction = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">		if (account.isPresent() &amp;&amp; customer.isPresent()) {</span>
+<span class="fc" id="L137">			accountSummaryResponseDto.setAccountNumber(account.get().getAccountNo());</span>
+<span class="fc" id="L138">			accountSummaryResponseDto.setBalance(account.get().getAvailableBalance());</span>
+<span class="fc" id="L139">			accountSummaryResponseDto.setName(customer.get().getCustomerName());</span>
+<span class="fc" id="L140">			accountSummaryResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);</span>
+<span class="fc" id="L141">			accountSummaryResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">			for (Transaction transaction : transactions) {</span>
+<span class="fc" id="L143">				TransactionDto transactionDto = new TransactionDto();</span>
+<span class="fc" id="L144">				transactionDto.setAmount(transaction.getAmount());</span>
+<span class="fc" id="L145">				transactionDto.setTransactionDate(transaction.getTransactionDate());</span>
+<span class="fc" id="L146">				transactionDto.setTransactionType(transaction.getTransactionType());</span>
+<span class="fc" id="L147">				transactionDto.setPayeeNo(transaction.getPayeeNo());</span>
+<span class="fc" id="L148">				listTransaction.add(transactionDto);</span>
+<span class="fc" id="L149">			}</span>
+<span class="fc" id="L150">			accountSummaryResponseDto.setTransactions(listTransaction);</span>
+		} else {
+<span class="fc" id="L152">			accountSummaryResponseDto.setStatusCode(ScrotifyConstant.NOT_FOUND_CODE);</span>
+<span class="fc" id="L153">			accountSummaryResponseDto.setMessage(ScrotifyConstant.INVALID_MESSAGE);</span>
+		}
+<span class="fc" id="L155">		return accountSummaryResponseDto;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
