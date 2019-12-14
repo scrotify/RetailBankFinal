@@ -44,7 +44,6 @@ public class Account implements Serializable {
 	@Column(name = "available_balance")
 	private Double availableBalance;
 
-	// @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OneToOne
 	@JoinColumn(name = "customerId")
 	private Customer customer;

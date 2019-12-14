@@ -45,6 +45,15 @@ public class Customer implements Serializable {
 
 	@Column(name = "customer_dob")
 	private LocalDate customerDob;
+	
+	@Column(name = "customer_salary")
+	private Double customerSalary;
+	
+	@Column(name = "customer_age")
+	private Double customerAge;
+	
+	@Column(name = "customer_role")
+	private Double customerRole;
 
 	@Column(name = "customer_mobileno")
 	private Long customerMobileNo;
@@ -128,6 +137,7 @@ public class Customer implements Serializable {
 		this.accountList = accountList;
 	}
 
+
 	public Integer getCustomerAge() {
 		return customerAge;
 	}
@@ -151,6 +161,4 @@ public class Customer implements Serializable {
 	public void setCustomerSalary(Double customerSalary) {
 		this.customerSalary = customerSalary;
 	}
-	
-	
 }

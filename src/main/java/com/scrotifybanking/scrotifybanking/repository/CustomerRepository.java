@@ -5,12 +5,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.scrotifybanking.scrotifybanking.entity.Customer;
+import org.springframework.stereotype.Repository;
 
 /**
  * Customer Repository has one method.
  *
  * @author anishaR
  */
+@Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	/**

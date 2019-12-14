@@ -16,6 +16,7 @@ import com.scrotifybanking.scrotifybanking.entity.Transaction;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The type Transaction service.
@@ -63,44 +64,66 @@ public class TransactionServiceImpl implements TransactionService {
 		return false;
 	}
 
+	@Transactional
 	@Override
 	public ApiResponse transferFund(Long custId, String toAccountNo, double amount, String accountStatus,
 			String accountType) {
+		boolean moreFund = false;
 		ApiResponse response = new ApiResponse();
 		Account payeeAccount = null;
 		Optional<Account> accountOptional = accountRepository.findById(Long.parseLong(toAccountNo));
+
 		Account customerAccount = accountRepository.findByCustomerByAccount(custId, accountStatus, accountType);
 
 		if (accountOptional.isPresent()) {
 			payeeAccount = accountOptional.get();
 			double balanceAmount = customerAccount.getAvailableBalance() - amount;
 			customerAccount.setAvailableBalance(balanceAmount);
-
 			double payeeAccountBalance = payeeAccount.getAvailableBalance();
-			payeeAccountBalance = payeeAccountBalance + amount;
-			payeeAccount.setAvailableBalance(payeeAccountBalance);
-
-			Transaction customertransaction = new Transaction();
-			customertransaction.setAccountNo(customerAccount);
-			customertransaction.setAmount(amount);
-			customertransaction.setTransactionDate(LocalDate.now());
-			customertransaction.setTransactionType(ScrotifyConstant.DEBIT_TRANSACTION);
-			customertransaction.setPayeeNo(Long.parseLong(toAccountNo));
-
-			Transaction payeeTransaction = new Transaction();
-			payeeTransaction.setAccountNo(payeeAccount);
-			payeeTransaction.setAmount(amount);
-			payeeTransaction.setTransactionDate(LocalDate.now());
-			payeeTransaction.setTransactionType(ScrotifyConstant.CREDIT_TRANSACTION);
-			payeeTransaction.setPayeeNo(customertransaction.getAccountNo().getAccountNo());
-
-			transactionRepository.save(customertransaction);
-			transactionRepository.save(payeeTransaction);
-			accountRepository.save(payeeAccount);
-			accountRepository.save(customerAccount);
-			response.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
+			if (payeeAccount.getAccountType().equalsIgnoreCase(ScrotifyConstant.MORTGAGE_ACCOUNT_TYPE)) {
+				payeeAccountBalance = payeeAccountBalance - amount;
+				if (payeeAccountBalance >= 0) {
+					payeeAccount.setAvailableBalance(payeeAccountBalance);
+				} else {
+					payeeAccount.setAvailableBalance(0D);
+					moreFund = true;
+				}
+			} else {
+		 		payeeAccountBalance = payeeAccountBalance + amount;
+				payeeAccount.setAvailableBalance(payeeAccountBalance);
+		    }
+			transaction(toAccountNo, amount, response, payeeAccount, customerAccount);
+			/*if (moreFund) {
+				customerAccount.setAvailableBalance(Math.abs(payeeAccountBalance));
+				transaction(String.valueOf(customerAccount.getAccountNo()),
+						payeeAccountBalance, response, customerAccount, payeeAccount);
+			}*/
 		}
 		return response;
+	}
+
+	private void transaction(String toAccountNo, double amount, ApiResponse response,
+							 Account payeeAccount,
+							 Account customerAccount) {
+		Transaction customertransaction = new Transaction();
+		customertransaction.setAccountNo(customerAccount);
+		customertransaction.setAmount(amount);
+		customertransaction.setTransactionDate(LocalDate.now());
+		customertransaction.setTransactionType(ScrotifyConstant.DEBIT_TRANSACTION);
+		customertransaction.setPayeeNo(Long.parseLong(toAccountNo));
+
+		Transaction payeeTransaction = new Transaction();
+		payeeTransaction.setAccountNo(payeeAccount);
+		payeeTransaction.setAmount(amount);
+		payeeTransaction.setTransactionDate(LocalDate.now());
+		payeeTransaction.setTransactionType(ScrotifyConstant.CREDIT_TRANSACTION);
+		payeeTransaction.setPayeeNo(customertransaction.getAccountNo().getAccountNo());
+
+		transactionRepository.save(customertransaction);
+		transactionRepository.save(payeeTransaction);
+		accountRepository.save(payeeAccount);
+		accountRepository.save(customerAccount);
+		response.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
 	}
 
 	/**

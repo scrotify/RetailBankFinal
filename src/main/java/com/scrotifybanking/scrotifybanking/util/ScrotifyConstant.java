@@ -121,6 +121,9 @@ public final class ScrotifyConstant {
 	
 	
 
+	public static final String MORTGAGE_ACCOUNT_TYPE = "Mortgage";
+
+
 	private ScrotifyConstant() {
 
 	}
