@@ -43,11 +43,17 @@ public class Customer implements Serializable {
 	@Column(name = "customer_password")
 	private String customerPassword;
 
-	@Column(name = "account_type")
-	private String accountType;
-
 	@Column(name = "customer_dob")
 	private LocalDate customerDob;
+	
+	@Column(name = "customer_salary")
+	private Double customerSalary;
+	
+	@Column(name = "customer_age")
+	private Double customerAge;
+	
+	@Column(name = "customer_role")
+	private Double customerRole;
 
 	@Column(name = "customer_mobileno")
 	private Long customerMobileNo;
@@ -90,14 +96,6 @@ public class Customer implements Serializable {
 		this.customerPassword = customerPassword;
 	}
 
-	public String getAccountType() {
-		return accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
 	public LocalDate getCustomerDob() {
 		return customerDob;
 	}
@@ -129,4 +127,29 @@ public class Customer implements Serializable {
 	public void setAccountList(List<Account> accountList) {
 		this.accountList = accountList;
 	}
+
+	public Double getCustomerSalary() {
+		return customerSalary;
+	}
+
+	public void setCustomerSalary(Double customerSalary) {
+		this.customerSalary = customerSalary;
+	}
+
+	public Double getCustomerAge() {
+		return customerAge;
+	}
+
+	public void setCustomerAge(Double customerAge) {
+		this.customerAge = customerAge;
+	}
+
+	public Double getCustomerRole() {
+		return customerRole;
+	}
+
+	public void setCustomerRole(Double customerRole) {
+		this.customerRole = customerRole;
+	}
+	
 }

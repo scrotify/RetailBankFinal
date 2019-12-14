@@ -67,7 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
 		} else if (customerRequestDto.getAccountType().equalsIgnoreCase(ScrotifyConstant.ACCOUNT_TYPE)
 				&& calculateAge >= ScrotifyConstant.AGE_LIMIT) {
 			Customer customer = new Customer();
-			customer.setAccountType(customerRequestDto.getAccountType());
+		
 			customer.setCustomerCity(customerRequestDto.getCity());
 			customer.setCustomerDob(customerRequestDto.getDob());
 			customer.setCustomerEmail(customerRequestDto.getEmailId());
@@ -79,7 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
 			account.setAccountStatus(ScrotifyConstant.ACCOUNT_ACTIVE_STATUS);
 			account.getAccountNo();
 			account.setCustomer(customer);
-			account.setAccountType(customer.getAccountType());
+		//	account.setAccountType(customer.getAccountType());
 			account.setAvailableBalance(ScrotifyConstant.AMOUNT);
 			accountRepository.save(account);
 			customerResponseDto.setCustomerId(customer.getCustomerId());
