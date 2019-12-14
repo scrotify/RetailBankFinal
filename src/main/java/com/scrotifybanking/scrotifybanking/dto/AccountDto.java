@@ -1,4 +1,4 @@
-package com.scrotifybanking.scrotifybanking.dto.response;
+package com.scrotifybanking.scrotifybanking.dto;
 
 public class AccountDto {
 

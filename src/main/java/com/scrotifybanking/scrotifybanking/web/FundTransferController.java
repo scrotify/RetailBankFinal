@@ -1,22 +1,26 @@
 package com.scrotifybanking.scrotifybanking.web;
 
-import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
-import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
-import com.scrotifybanking.scrotifybanking.dto.response.MortgageTransferDto;
-import com.scrotifybanking.scrotifybanking.exception.CustomException;
-import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
-import com.scrotifybanking.scrotifybanking.service.AccountService;
-import com.scrotifybanking.scrotifybanking.service.CustomerService;
-import com.scrotifybanking.scrotifybanking.service.TransactionService;
-import com.scrotifybanking.scrotifybanking.service.impl.AccountServiceImpl;
-import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
+import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
+import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
+import com.scrotifybanking.scrotifybanking.dto.MortgageTransferDto;
+import com.scrotifybanking.scrotifybanking.exception.CustomException;
+import com.scrotifybanking.scrotifybanking.service.AccountService;
+import com.scrotifybanking.scrotifybanking.service.TransactionService;
+import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
 
 /**
  * The type Fund transfer controller.

@@ -2,10 +2,9 @@ package com.scrotifybanking.scrotifybanking.service;
 
 import java.util.List;
 
-
+import com.scrotifybanking.scrotifybanking.dto.AccountDto;
 import com.scrotifybanking.scrotifybanking.dto.AccountResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.response.AccountDto;
-import com.scrotifybanking.scrotifybanking.dto.response.MortgageTransferDto;
+import com.scrotifybanking.scrotifybanking.dto.MortgageTransferDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 

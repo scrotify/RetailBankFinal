@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.scrotifybanking.scrotifybanking.exception.CustomException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,15 +18,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
-import com.scrotifybanking.scrotifybanking.dto.AccountNosDto;
+import com.scrotifybanking.scrotifybanking.dto.AccountNumbersDto;
 import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.response.AccountNumbersDto;
-import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
-
 import com.scrotifybanking.scrotifybanking.entity.Account;
+import com.scrotifybanking.scrotifybanking.exception.CustomException;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.service.TransactionService;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
