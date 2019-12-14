@@ -95,6 +95,9 @@ public final class ScrotifyConstant {
 	 */
 	public static final int NOT_FOUND_CODE = 404;
 
+	public static final String MORTGAGE_ACCOUNT_TYPE = "Mortgage";
+
+
 	private ScrotifyConstant() {
 
 	}

@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
+import org.springframework.stereotype.Repository;
 
 /**
  * The interface Transaction repository.
  */
+@Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 	/**
 	 * Find by account no list.

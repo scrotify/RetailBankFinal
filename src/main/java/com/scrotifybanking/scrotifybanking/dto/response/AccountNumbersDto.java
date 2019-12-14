@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * The type Account nos dto.
  */
-public class AccountNosDto {
+public class AccountNumbersDto {
 
 	private List<Long> accountNos;
 

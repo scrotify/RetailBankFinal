@@ -2,6 +2,8 @@ package com.scrotifybanking.scrotifybanking.service;
 
 import java.util.List;
 
+import com.scrotifybanking.scrotifybanking.dto.response.AccountDto;
+import com.scrotifybanking.scrotifybanking.dto.response.MortgageTransferDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 
 /**
@@ -18,5 +20,9 @@ public interface AccountService {
 	 * @return the list
 	 */
 	List<Account> findAllByAccountNotCustomer(String custId, String accountStatus, String accountType);
+
+	public AccountDto findByAccountNumber(Long accountNumber);
+
+	public List<MortgageTransferDto> findAllByCustomerNumber(Long customerNumber);
 
 }

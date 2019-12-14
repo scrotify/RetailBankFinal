@@ -3,16 +3,19 @@ package com.scrotifybanking.scrotifybanking.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.scrotifybanking.scrotifybanking.dto.response.MortgageTransferDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
+import org.springframework.stereotype.Repository;
 
 /**
  * The interface Account repository.
  */
+@Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
 	/**
@@ -76,4 +79,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	 * @return the optional
 	 */
 	Optional<Account> findByCustomer(Optional<Customer> customer);
+
+	Optional<List<Account>> findAllByCustomerCustomerId(Long customerId);
+
 }
