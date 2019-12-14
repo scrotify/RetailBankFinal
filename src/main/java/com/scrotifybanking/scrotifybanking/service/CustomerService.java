@@ -3,8 +3,10 @@ package com.scrotifybanking.scrotifybanking.service;
 import com.scrotifybanking.scrotifybanking.dto.AccountSummaryResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.LoginDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.LoginResponseDto;
+import com.scrotifybanking.scrotifybanking.entity.Account;
+import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 
 /**
  * The interface Customer service.
@@ -26,8 +28,9 @@ public interface CustomerService {
 	 *
 	 * @param loginDto the login dto
 	 * @return the login response dto
+	 * @throws CustomerNotFoundException 
 	 */
-	public LoginResponseDto loginCustomer(LoginDto loginDto);
+	public LoginResponseDto loginCustomer(LoginRequestDto loginDto) throws CustomerNotFoundException;
 
 	/**
 	 * Account summary account summary response dto.
@@ -35,6 +38,8 @@ public interface CustomerService {
 	 * @param customerId the customer id
 	 * @return the account summary response dto
 	 */
-	public AccountSummaryResponseDto accountSummary(Long customerId);
+	public AccountSummaryResponseDto mortgageAccountSummary(Long id);
+
+	public AccountSummaryResponseDto savingsAccountSummary(Long id);
 
 }

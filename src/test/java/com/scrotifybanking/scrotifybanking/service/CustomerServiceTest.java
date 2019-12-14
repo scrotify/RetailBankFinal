@@ -17,16 +17,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.scrotifybanking.scrotifybanking.dto.AccountSummaryResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.LoginDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.LoginResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
+import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.CustomerRepository;
 import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
-import com.scrotifybanking.scrotifybanking.service.impl.CustomerServiceImpl;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,21 +48,19 @@ public class CustomerServiceTest {
 	public void testRegisterNegativeCase() {
 		Customer customer1 = null;
 		CustomerRequestDto customerRequestDto = new CustomerRequestDto();
-		customerRequestDto.setAccountType("fg");
 		customerRequestDto.setCity("Bangalore");
 		customerRequestDto.setEmailId(("anisharavi101@gmail.com"));
 		customerRequestDto.setName("Anisha");
 		customerRequestDto.setPassword("Anu");
-		customerRequestDto.setPhone(9894187107L);
+		customerRequestDto.setMobileNo(9894187107L);
 		customerRequestDto.setDob(LocalDate.parse("2019-10-10"));
 
 		Customer customer = new Customer();
-		customer.setAccountType(customerRequestDto.getAccountType());
 		customer.setCustomerCity(customerRequestDto.getCity());
 		customer.setCustomerDob(customerRequestDto.getDob());
 		customer.setCustomerEmail(customerRequestDto.getEmailId());
 		customer.setCustomerId(100L);
-		customer.setCustomerMobileNo(customerRequestDto.getPhone());
+		customer.setCustomerMobileNo(customerRequestDto.getMobileNo());
 		customer.setCustomerName(customerRequestDto.getName());
 		customer.setCustomerPassword(customerRequestDto.getPassword());
 
@@ -73,9 +71,9 @@ public class CustomerServiceTest {
 		account.setAvailableBalance(ScrotifyConstant.AMOUNT);
 		account.setCustomer(customer);
 
-		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getPhone())).thenReturn(customer1);
+		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getMobileNo())).thenReturn(customer1);
 		CustomerResponseDto customerResponseDto = new CustomerResponseDto();
-		customerResponseDto.setCustomerId(1000L);
+		customerResponseDto.setId(1000L);
 		customerResponseDto.setMessage(ScrotifyConstant.FAILURE_MESSAGE);
 		customerResponseDto.setStatusCode(ScrotifyConstant.FAILURE_CODE);
 		CustomerResponseDto result = customerServiceImpl.registerCustomer(customerRequestDto);
@@ -86,21 +84,19 @@ public class CustomerServiceTest {
 	public void testRegisterFailureCase() {
 		Customer customer1 = null;
 		CustomerRequestDto customerRequestDto = new CustomerRequestDto();
-		customerRequestDto.setAccountType("fg");
 		customerRequestDto.setCity("Bangalore");
 		customerRequestDto.setEmailId(("anisharavi101@gmail.com"));
 		customerRequestDto.setName("Anisha");
 		customerRequestDto.setPassword("Anu");
-		customerRequestDto.setPhone(9894187107L);
+		customerRequestDto.setMobileNo(9894187107L);
 		customerRequestDto.setDob(LocalDate.parse("2019-10-10"));
 
 		Customer customer = new Customer();
-		customer.setAccountType(customerRequestDto.getAccountType());
 		customer.setCustomerCity(customerRequestDto.getCity());
 		customer.setCustomerDob(customerRequestDto.getDob());
 		customer.setCustomerEmail(customerRequestDto.getEmailId());
 		customer.setCustomerId(100L);
-		customer.setCustomerMobileNo(customerRequestDto.getPhone());
+		customer.setCustomerMobileNo(customerRequestDto.getMobileNo());
 		customer.setCustomerName(customerRequestDto.getName());
 		customer.setCustomerPassword(customerRequestDto.getPassword());
 
@@ -111,9 +107,9 @@ public class CustomerServiceTest {
 		account.setAvailableBalance(ScrotifyConstant.AMOUNT);
 		account.setCustomer(customer);
 
-		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getPhone())).thenReturn(customer1);
+		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getMobileNo())).thenReturn(customer1);
 		CustomerResponseDto customerResponseDto = new CustomerResponseDto();
-		customerResponseDto.setCustomerId(1000L);
+		customerResponseDto.setId(1000L);
 		customerResponseDto.setMessage(ScrotifyConstant.FAILURE_MESSAGE);
 		customerResponseDto.setStatusCode(ScrotifyConstant.FAILURE_CODE);
 		CustomerResponseDto result = customerServiceImpl.registerCustomer(customerRequestDto);
@@ -124,17 +120,16 @@ public class CustomerServiceTest {
 	public void testRegistersFailureCase() {
 		Customer customer1 = new Customer();
 		CustomerRequestDto customerRequestDto = new CustomerRequestDto();
-		customerRequestDto.setAccountType("fg");
 		customerRequestDto.setCity("Bangalore");
 		customerRequestDto.setEmailId(("anisharavi101@gmail.com"));
 		customerRequestDto.setName("Anisha");
 		customerRequestDto.setPassword("Anu");
-		customerRequestDto.setPhone(9894187107L);
+		customerRequestDto.setMobileNo(9894187107L);
 		customerRequestDto.setDob(LocalDate.parse("2019-10-10"));
 
-		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getPhone())).thenReturn(customer1);
+		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getMobileNo())).thenReturn(customer1);
 		CustomerResponseDto customerResponseDto = new CustomerResponseDto();
-		customerResponseDto.setCustomerId(1000L);
+		customerResponseDto.setId(1000L);
 		customerResponseDto.setMessage(ScrotifyConstant.FAILURE_REGISTRATION_MESSAGE);
 		customerResponseDto.setStatusCode(ScrotifyConstant.FAILURE_REGISTRATION_CODE);
 		CustomerResponseDto result = customerServiceImpl.registerCustomer(customerRequestDto);
@@ -147,21 +142,19 @@ public class CustomerServiceTest {
 		Customer customer1 = null;
 
 		CustomerRequestDto customerRequestDto = new CustomerRequestDto();
-		customerRequestDto.setAccountType("Saving");
 		customerRequestDto.setCity("Bangalore");
 		customerRequestDto.setEmailId(("anisharavi101@gmail.com"));
 		customerRequestDto.setName("Anisha");
 		customerRequestDto.setPassword("Anu");
-		customerRequestDto.setPhone(9894187107L);
+		customerRequestDto.setMobileNo(9894187107L);
 		customerRequestDto.setDob(LocalDate.parse("2000-10-10"));
 
 		Customer customer = new Customer();
-		customer.setAccountType(customerRequestDto.getAccountType());
 		customer.setCustomerCity(customerRequestDto.getCity());
 		customer.setCustomerDob(customerRequestDto.getDob());
 		customer.setCustomerEmail(customerRequestDto.getEmailId());
 		customer.setCustomerId(100L);
-		customer.setCustomerMobileNo(customerRequestDto.getPhone());
+		customer.setCustomerMobileNo(customerRequestDto.getMobileNo());
 		customer.setCustomerName(customerRequestDto.getName());
 		customer.setCustomerPassword(customerRequestDto.getPassword());
 
@@ -172,9 +165,9 @@ public class CustomerServiceTest {
 		account.setAvailableBalance(ScrotifyConstant.AMOUNT);
 		account.setCustomer(customer);
 
-		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getPhone())).thenReturn(customer1);
+		Mockito.when(customerRepository.findByCustomerMobileNo(customerRequestDto.getMobileNo())).thenReturn(customer1);
 		CustomerResponseDto customerResponseDto = new CustomerResponseDto();
-		customerResponseDto.setCustomerId(1000L);
+		customerResponseDto.setId(1000L);
 		customerResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
 		customerResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
 		Mockito.when(customerRepository.save(customer)).thenReturn(customer);
@@ -185,58 +178,58 @@ public class CustomerServiceTest {
 	}
 
 	@Test
-	public void testLoginCustomer() {
+	public void testLoginCustomer() throws CustomerNotFoundException {
 
 		LoginResponseDto loginResponseDto = new LoginResponseDto();
-		loginResponseDto.setCustomerId(1000L);
+		loginResponseDto.setId(1000L);
 		loginResponseDto.setName("visha");
 		loginResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
 		loginResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
 
-		LoginDto loginDto = new LoginDto();
-		loginDto.setCustId(1001L);
+		LoginRequestDto loginDto = new LoginRequestDto();
+		loginDto.setId(1001L);
 		loginDto.setPassword("bai123");
 
 		Customer customer = new Customer();
-		customer.setCustomerId(loginDto.getCustId());
+		customer.setCustomerId(loginDto.getId());
 		customer.setCustomerPassword(loginDto.getPassword());
 
-		Mockito.when(customerRepository.findByCustomerId(loginDto.getCustId())).thenReturn(Optional.of(customer));
+		Mockito.when(customerRepository.findByCustomerId(loginDto.getId())).thenReturn(Optional.of(customer));
 		LoginResponseDto result = customerServiceImpl.loginCustomer(loginDto);
 
 		assertEquals("SUCCESS", result.getMessage());
 	}
 
 	@Test
-	public void testLoginCustomerForFailure() {
+	public void testLoginCustomerForFailure() throws CustomerNotFoundException {
 
 		LoginResponseDto loginResponseDto = new LoginResponseDto();
 		loginResponseDto.setStatusCode(ScrotifyConstant.FAILURE_CODE);
 		loginResponseDto.setMessage(ScrotifyConstant.FAILURE_MESSAGE);
 
-		LoginDto loginDto = new LoginDto();
-		loginDto.setCustId(1001L);
+		LoginRequestDto loginDto = new LoginRequestDto();
+		loginDto.setId(1001L);
 		loginDto.setPassword("bai3");
 
 		Customer customer = new Customer();
-		customer.setCustomerId(loginDto.getCustId());
+		customer.setCustomerId(loginDto.getId());
 		customer.setCustomerPassword("bai12");
 
-		Mockito.when(customerRepository.findByCustomerId(loginDto.getCustId())).thenReturn(Optional.of(customer));
+		Mockito.when(customerRepository.findByCustomerId(loginDto.getId())).thenReturn(Optional.of(customer));
 		LoginResponseDto result = customerServiceImpl.loginCustomer(loginDto);
 
 		assertEquals("Invalid Username or Password", result.getMessage());
 	}
 
 	@Test
-	public void testLoginCustomerForNotFound() {
+	public void testLoginCustomerForNotFound() throws CustomerNotFoundException {
 
 		LoginResponseDto loginResponseDto = new LoginResponseDto();
 		loginResponseDto.setStatusCode(ScrotifyConstant.NOT_FOUND_CODE);
 		loginResponseDto.setMessage(ScrotifyConstant.INVALID_MESSAGE);
 
-		LoginDto loginDto = new LoginDto();
-		loginDto.setCustId(1008L);
+		LoginRequestDto loginDto = new LoginRequestDto();
+		loginDto.setId(1008L);
 		loginDto.setPassword("bai123");
 
 		Customer customer = new Customer();
@@ -284,7 +277,7 @@ public class CustomerServiceTest {
 		Mockito.when(accountRepository.findByCustomer(Optional.of(customer))).thenReturn(Optional.of(account));
 		Mockito.when(transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(Optional.of(account)))
 				.thenReturn(transactionList);
-		AccountSummaryResponseDto result = customerServiceImpl.accountSummary(1000L);
+		AccountSummaryResponseDto result = customerServiceImpl.mortgageAccountSummary(1000L);
 
 		assertEquals(ScrotifyConstant.SUCCESS_MESSAGE, result.getMessage());
 	}
@@ -324,7 +317,7 @@ public class CustomerServiceTest {
 		Mockito.when(accountRepository.findByCustomer(Optional.of(customer))).thenReturn(Optional.of(account));
 		Mockito.when(transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(Optional.of(account)))
 				.thenReturn(transactionList);
-		AccountSummaryResponseDto result = customerServiceImpl.accountSummary(1000L);
+		AccountSummaryResponseDto result = customerServiceImpl.mortgageAccountSummary(1000L);
 
 		assertEquals(ScrotifyConstant.INVALID_MESSAGE, result.getMessage());
 	}

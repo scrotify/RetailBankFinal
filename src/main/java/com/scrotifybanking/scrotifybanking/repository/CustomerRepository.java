@@ -22,19 +22,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	Customer findByCustomerMobileNo(Long customerMobileNo);
 
 	/**
-	 * Find by account type customer.
-	 *
-	 * @param accountType the account type
-	 * @return the customer
-	 */
-	Customer findByAccountType(String accountType);
-
-	/**
 	 * Find by customer id optional.
 	 *
 	 * @param customerId the customer id
 	 * @return the optional
 	 */
-	Optional<Customer> findByCustomerId(Long customerId);
+	Optional<Customer> findByCustomerId(Long id);
 
 }

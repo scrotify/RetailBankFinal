@@ -2,9 +2,9 @@ package com.scrotifybanking.scrotifybanking.service;
 
 import java.util.List;
 
+import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
 
 /**
  * The interface Transaction service.

@@ -1,4 +1,4 @@
-package com.scrotifybanking.scrotifybanking.service.impl;
+package com.scrotifybanking.scrotifybanking.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,14 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
-import com.scrotifybanking.scrotifybanking.service.TransactionService;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
 
 /**

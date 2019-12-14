@@ -16,13 +16,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
+import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
-import com.scrotifybanking.scrotifybanking.service.impl.TransactionServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FundTransferServiceTest {
@@ -70,7 +69,6 @@ public class FundTransferServiceTest {
 		Customer customer = new Customer();
 		customer.setCustomerMobileNo(1111111L);
 		customer.setCustomerCity("Hosur");
-		customer.setAccountType("Saving");
 		customer.setCustomerDob(LocalDate.of(1983, 10, 10));
 		customer.setCustomerName("xxy");
 		customer.setCustomerEmail("xxy@gmail.com");

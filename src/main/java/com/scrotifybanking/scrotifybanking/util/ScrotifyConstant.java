@@ -91,9 +91,35 @@ public final class ScrotifyConstant {
 	 */
 	public static final int FAILURE_CODE = 401;
 	/**
-	 * The constant FAILURE_CODE.
+	 * The constant SAVINGS_ACCOUNT_MESSAGE.
+	 */
+	public static final String SAVINGS_ACCOUNT_MESSAGE = "Savings";
+	/**
+	 * The constant MORTGAGE_ACCOUNT_MESSAGE.
+	 */
+	public static final String MORTGAGE_ACCOUNT_MESSAGE = "Mortgage";
+	/**
+	 * The constant NOT_FOUND_CODE.
 	 */
 	public static final int NOT_FOUND_CODE = 404;
+	/**
+	 * The constant BALANCE_AMOUNT.
+	 */
+	public static final Double BALANCE_AMOUNT = 1000000.0;
+	/**
+	 * The constant ACCOUNT_CREATED_MESSAGE.
+	 */
+	public static final String ACCOUNT_CREATED_MESSAGE = "Account created successfully";
+	/**
+	 * The constant CREATED_CODE.
+	 */
+	public static final int CREATED_CODE = 201;
+	/**
+	 * The constant ACCOUNT_CREATED_MESSAGE.
+	 */
+	public static final String ADMIN_MESSAGE = "admin";
+	
+	
 
 	private ScrotifyConstant() {
 

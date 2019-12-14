@@ -76,4 +76,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	 * @return the optional
 	 */
 	Optional<Account> findByCustomer(Optional<Customer> customer);
+
+	Optional<Account> findByCustomerAndAccountType(Optional<Customer> customer, String string);
 }

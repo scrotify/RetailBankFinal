@@ -6,19 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * The type Login response dto.
+ * The type LoginRequestDto.
  */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponseDto {
+public class LoginRequestDto {
 
 	private Long id;
-	private String name;
-	private String role;
-	private String message;
-	private Integer statusCode;
+	private String password;
 
-	
 }

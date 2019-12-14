@@ -16,12 +16,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.scrotifybanking.scrotifybanking.dto.AccountSummaryResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.LoginDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.LoginResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
+import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 import com.scrotifybanking.scrotifybanking.service.CustomerService;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
 
@@ -38,16 +39,15 @@ public class CustomerControllerLoginTest {
 	public void testRegisterCustomerPositive() {
 
 		CustomerRequestDto customerRequestDto = new CustomerRequestDto();
-		customerRequestDto.setAccountType("Savings");
 		customerRequestDto.setCity("Bangalore");
 		customerRequestDto.setEmailId(("anisharavi101@gmail.com"));
 		customerRequestDto.setName("Anisha");
 		customerRequestDto.setPassword("Anu");
-		customerRequestDto.setPhone(9894187107L);
+		customerRequestDto.setMobileNo(9894187107L);
 		customerRequestDto.setDob(LocalDate.parse("1000-10-10"));
 
 		CustomerResponseDto customerResponseDto = new CustomerResponseDto();
-		customerResponseDto.setCustomerId(1000L);
+		customerResponseDto.setId(1000L);
 		customerResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
 		customerResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
 
@@ -57,20 +57,20 @@ public class CustomerControllerLoginTest {
 	}
 
 	@Test
-	public void testLoginCustomer() {
+	public void testLoginCustomer() throws CustomerNotFoundException {
 
 		LoginResponseDto loginResponseDto = new LoginResponseDto();
-		loginResponseDto.setCustomerId(1000L);
+		loginResponseDto.setId(1000L);
 		loginResponseDto.setName("visha");
 		loginResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
 		loginResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
 
-		LoginDto loginDto = new LoginDto();
-		loginDto.setCustId(1001L);
+		LoginRequestDto loginDto = new LoginRequestDto();
+		loginDto.setId(1001L);
 		loginDto.setPassword("bai123");
 
 		Customer customer = new Customer();
-		customer.setCustomerId(loginDto.getCustId());
+		customer.setCustomerId(loginDto.getId());
 		customer.setCustomerPassword(loginDto.getPassword());
 
 		Mockito.when(customerService.loginCustomer(loginDto)).thenReturn(loginResponseDto);
@@ -110,8 +110,8 @@ public class CustomerControllerLoginTest {
 		List<Transaction> transactionList = new ArrayList<>();
 		transactionList.add(transaction);
 
-		Mockito.when(customerService.accountSummary(1000L)).thenReturn(accountSummaryResponseDto);
-		AccountSummaryResponseDto result = customerController.lastTransaction(1000L).getBody();
+		Mockito.when(customerService.mortgageAccountSummary(1000L)).thenReturn(accountSummaryResponseDto);
+		AccountSummaryResponseDto result = customerController.mortgageSummary(1000L).getBody();
 
 		assertEquals(ScrotifyConstant.SUCCESS_MESSAGE, result.getMessage());
 	}

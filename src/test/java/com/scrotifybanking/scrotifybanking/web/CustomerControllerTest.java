@@ -18,11 +18,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
+import com.scrotifybanking.scrotifybanking.dto.AccountNosDto;
+import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.response.AccountNosDto;
-import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.exception.CustomException;
 import com.scrotifybanking.scrotifybanking.exception.MaintainBalanceException;

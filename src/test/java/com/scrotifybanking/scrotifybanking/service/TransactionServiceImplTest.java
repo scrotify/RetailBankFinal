@@ -22,7 +22,6 @@ import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
-import com.scrotifybanking.scrotifybanking.service.impl.TransactionServiceImpl;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class TransactionServiceImplTest {

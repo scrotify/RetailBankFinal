@@ -16,18 +16,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scrotifybanking.scrotifybanking.dto.AccountNosDto;
 import com.scrotifybanking.scrotifybanking.dto.AccountSummaryResponseDto;
+import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.dto.CustomerRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
-import com.scrotifybanking.scrotifybanking.dto.LoginDto;
+import com.scrotifybanking.scrotifybanking.dto.LoginRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.LoginResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
-import com.scrotifybanking.scrotifybanking.dto.response.AccountNosDto;
-import com.scrotifybanking.scrotifybanking.dto.response.ApiResponse;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.exception.CustomException;
+import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 import com.scrotifybanking.scrotifybanking.exception.MaintainBalanceException;
 import com.scrotifybanking.scrotifybanking.exception.MinimumBalanceNotFoundException;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
@@ -151,10 +152,11 @@ public class CustomerController {
 	 *
 	 * @param loginDto the login dto
 	 * @return the response entity
+	 * @throws CustomerNotFoundException 
 	 */
 
-	@PostMapping("/{customerId}/{password}")
-	public ResponseEntity<LoginResponseDto> loginCustomer(@RequestBody LoginDto loginDto) {
+	@PostMapping("/login")
+	public ResponseEntity<LoginResponseDto> loginCustomer(@RequestBody LoginRequestDto loginDto) throws CustomerNotFoundException {
 		return new ResponseEntity<>(customerService.loginCustomer(loginDto), HttpStatus.OK);
 	}
 
@@ -165,9 +167,14 @@ public class CustomerController {
 	 * @return the response entity
 	 */
 
-	@GetMapping("/{customerId}")
-	public ResponseEntity<AccountSummaryResponseDto> lastTransaction(@PathVariable Long customerId) {
-		return new ResponseEntity<>(customerService.accountSummary(customerId), HttpStatus.OK);
+	@GetMapping("/{id}")
+	public ResponseEntity<AccountSummaryResponseDto> savingSummary(@PathVariable Long id) {
+		return new ResponseEntity<>(customerService.savingsAccountSummary(id), HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}/mortgage")
+	public ResponseEntity<AccountSummaryResponseDto> mortgageSummary(@PathVariable Long id) {
+		return new ResponseEntity<>(customerService.mortgageAccountSummary(id), HttpStatus.OK);
 	}
 
 }
