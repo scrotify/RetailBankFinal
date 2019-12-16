@@ -1,5 +1,7 @@
 package com.scrotifybanking.scrotifybanking.service;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -78,10 +80,7 @@ public class AccountServiceTest {
 	List<SearchSavingsAccountResponseDto> response=accountServiceImpl.searchSavingsAccounts(10001234L);
 	Assert.assertNotNull(response);
 	}
-
-
-	
-	@Test
+		@Test
 	public void testCreateMortgageAccount() throws CustomerNotFoundException {
 		Customer customer = new Customer();
 		customer.setCustomerId(1000L);

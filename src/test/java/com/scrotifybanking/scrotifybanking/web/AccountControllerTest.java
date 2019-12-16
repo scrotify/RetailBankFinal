@@ -51,5 +51,4 @@ public class AccountControllerTest {
 		List<SearchSavingsAccountResponseDto> response = accountController.searchSavingsAccounts(10001234L);
 		Assert.assertNotNull(response);
 	}
-
 }
