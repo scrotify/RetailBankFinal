@@ -46,7 +46,7 @@ public final class ScrotifyConstant {
 	/**
 	 * The constant ACCOUNT_TYPE.
 	 */
-	public static final String ACCOUNT_TYPE = "Saving";
+	public static final String ACCOUNT_TYPE = "Savings";
 	/**
 	 * The constant FUND_TRANSFER_FAILED.
 	 */
@@ -122,6 +122,8 @@ public final class ScrotifyConstant {
 	
 
 	public static final String MORTGAGE_ACCOUNT_TYPE = "Mortgage";
+
+	public static final String ACCOUNT_NOT_FOUND = "Account number not found";
 
 
 	private ScrotifyConstant() {

@@ -46,11 +46,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, headers, status);
     }
 
-    @ExceptionHandler(value = {CustomException.class, Exception.class})
-    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-        List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
-        ApiError error = new ApiError(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
-    }
+	/**
+	 * @ExceptionHandler(value = {CustomException.class, Exception.class}) public
+	 * final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest
+	 * request) { List<String> details = new ArrayList<>();
+	 * details.add(ex.getLocalizedMessage()); ApiError error = new
+	 * ApiError(ex.getMessage(), HttpStatus.NOT_FOUND); return new
+	 * ResponseEntity(error, HttpStatus.BAD_REQUEST); }
+	 */
+    @ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponse> globalExceptionHandler(Exception exception, WebRequest request) {
+		 ErrorResponse errorResponse = new ErrorResponse();
+		  errorResponse.setMessage(exception.getMessage());
+		  errorResponse.setStatusCode(404);
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+
+	}
 }

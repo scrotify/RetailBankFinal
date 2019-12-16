@@ -26,7 +26,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	 * @return the double
 	 */
 	@Query("select acc.availableBalance from Account acc where acc.customer.customerId = :custId and acc.accountStatus = :accountStatus and acc.accountType = :accountType")
-	double findByAccountBalance(@Param("custId") Long custId, @Param("accountStatus") String accountStatus,
+	Double findByAccountBalance(@Param("custId") Long custId, @Param("accountStatus") String accountStatus,
 			@Param("accountType") String accountType);
 
 	/**
@@ -80,6 +80,11 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	Optional<Account> findByCustomer(Optional<Customer> customer);
 
 	Optional<Account> findByCustomerAndAccountType(Optional<Customer> customer, String string);
-	
+
 	Optional<List<Account>> findAllByCustomerCustomerId(Long customerId);
+	Optional<Account> findByAccountNo(Long accountNo);
+	
+	@Query(nativeQuery = true, value = "select * from account ac where ac.customer_id not in (select a.customer_id from account a where a.account_type='mortgage') and CONCAT(ac.account_no, '') Like %:accountNo%")
+	List<Account> getAccountsByPartialAccountNo(@Param("accountNo")  String accountNo);
+
 }

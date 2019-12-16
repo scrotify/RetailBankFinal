@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import org.springframework.stereotype.Service;
 import com.scrotifybanking.scrotifybanking.dto.AccountDto;
 import com.scrotifybanking.scrotifybanking.dto.AccountResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.MortgageTransferDto;
+import com.scrotifybanking.scrotifybanking.dto.SearchSavingsAccountResponseDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
 import com.scrotifybanking.scrotifybanking.exception.CustomException;
 import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
+import com.scrotifybanking.scrotifybanking.exception.ErrorResponse;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.CustomerRepository;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
@@ -25,6 +29,8 @@ import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
  */
 @Service
 public class AccountServiceImpl implements AccountService {
+
+	private static Logger logger = LogManager.getLogger(AccountServiceImpl.class);
 
 	@Autowired
 	private AccountRepository accountRepository;
@@ -42,11 +48,21 @@ public class AccountServiceImpl implements AccountService {
 	 */
 	@Override
 	public List<Account> findAllByAccountNotCustomer(String custId, String accountStatus, String accountType) {
+		logger.info("Entering into findAll by customer controller method");
 		return accountRepository.findAllByAccountNotCustomer(Long.parseLong(custId), accountStatus, accountType);
 	}
 
+	/**
+	 * This method is used for creating mortgage account
+	 * 
+	 * @param id
+	 * @return
+	 * 
+	 */
+
 	@Override
 	public AccountResponseDto createMortgageAccount(Long id) throws CustomerNotFoundException {
+		logger.info("Entering into create mortagage account");
 		Optional<Customer> customer = customerRepository.findByCustomerId(id);
 		Account account = new Account();
 		AccountResponseDto accountResponseDto = new AccountResponseDto();
@@ -56,50 +72,89 @@ public class AccountServiceImpl implements AccountService {
 			account.setAvailableBalance(ScrotifyConstant.BALANCE_AMOUNT);
 			account.setCustomer(customer.get());
 			accountRepository.save(account);
+			accountResponseDto.setAccountNo(account.getAccountNo());
 			accountResponseDto.setMessage(ScrotifyConstant.ACCOUNT_CREATED_MESSAGE);
 			accountResponseDto.setStatusCode(ScrotifyConstant.CREATED_CODE);
 		} else {
 			throw new CustomerNotFoundException(ScrotifyConstant.CUSTOMER_ID_NOT_FOUND);
 		}
+		logger.info("Ending of create mortgage account method");
 		return accountResponseDto;
 	}
 
- 
+	/**
+	 * search by account no
+	 *
+	 * @param accountNumber
+	 * @return
+	 */
+	@Override
+	public AccountDto findByAccountNumber(Long accountNumber) {
 
-    /**
-     * search by account no
-     *
-     * @param accountNumber
-     * @return
-     */
-    @Override
-    public AccountDto findByAccountNumber(Long accountNumber) {
-        Optional<Account> accountOptional = accountRepository.findById(accountNumber);
-        AccountDto accountDto = new AccountDto();
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
-            BeanUtils.copyProperties(account, accountDto);
-            accountDto.setCustomerId(account.getCustomer().getCustomerId());
-        }
+		Optional<Account> accountOptional = accountRepository.findById(accountNumber);
+		AccountDto accountDto = new AccountDto();
+		if (accountOptional.isPresent()) {
+			Account account = accountOptional.get();
+			BeanUtils.copyProperties(account, accountDto);
+			accountDto.setCustomerId(account.getCustomer().getCustomerId());
+		}
 		return accountDto;
-    }
+	}
 
-    @Override
-    public List<MortgageTransferDto> findAllByCustomerNumber(Long customerNumber) {
-        Optional<List<Account>> accountOptional = accountRepository.findAllByCustomerCustomerId(customerNumber);
+	@Override
+	public List<MortgageTransferDto> findAllByCustomerNumber(Long customerNumber) {
+		Optional<List<Account>> accountOptional = accountRepository.findAllByCustomerCustomerId(customerNumber);
 		List<MortgageTransferDto> mortgageTransferDtos = new ArrayList<>();
-        if (accountOptional.isPresent()) {
-            List<Account> account = accountOptional.get();
-			 mortgageTransferDtos = account.stream().map(acc -> {
+		if (accountOptional.isPresent()) {
+			List<Account> account = accountOptional.get();
+			mortgageTransferDtos = account.stream().map(acc -> {
 				MortgageTransferDto mortgageTransferDto = new MortgageTransferDto();
 				mortgageTransferDto.setAccountNumber(acc.getAccountNo());
 				mortgageTransferDto.setAccountType(acc.getAccountType());
 				return mortgageTransferDto;
 			}).collect(Collectors.toList());
-        } else {
-            throw new CustomException("Account is not available");
-        }
+		} else {
+			throw new CustomException("Account is not available");
+		}
 		return mortgageTransferDtos;
-    }
+	}
 
+	/**
+	 * Description: this method is operate when the admin want to see list of
+	 * savings accounts
+	 * 
+	 * @param accountNo
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	@Override
+	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) throws Exception {
+		SearchSavingsAccountResponseDto searchSavingsAccountResponseDto = null;
+		Optional<Account> accountNumber = accountRepository.findByAccountNo(accountNo);
+		List<SearchSavingsAccountResponseDto> accountsBySavings = new ArrayList<>();
+		if (accountNumber.isPresent()) {
+			List<Account> accountList = accountRepository.getAccountsByPartialAccountNo("" + accountNo);
+			for (Account accounts : accountList) {
+				Long customerId = accounts.getCustomer().getCustomerId();
+				Optional<Customer> customerDetails = customerRepository.findByCustomerId(customerId);
+				searchSavingsAccountResponseDto = new SearchSavingsAccountResponseDto();
+				searchSavingsAccountResponseDto.setAccountNo(accounts.getAccountNo());
+				searchSavingsAccountResponseDto.setAccountType(accounts.getAccountType());
+				searchSavingsAccountResponseDto.setAvailableBalance(accounts.getAvailableBalance());
+				searchSavingsAccountResponseDto.setCustomerId(customerDetails.get().getCustomerId());
+				searchSavingsAccountResponseDto.setCustomerName(customerDetails.get().getCustomerName());
+				searchSavingsAccountResponseDto.setCustomerSalary(customerDetails.get().getCustomerSalary());
+				searchSavingsAccountResponseDto.setCustomerMobileNo(customerDetails.get().getCustomerMobileNo());
+				searchSavingsAccountResponseDto.setCustomerAge(customerDetails.get().getCustomerAge());
+				searchSavingsAccountResponseDto.setCustomerCity(customerDetails.get().getCustomerCity());
+				accountsBySavings.add(searchSavingsAccountResponseDto);
+				return accountsBySavings;
+			}
+		} else {
+			throw new Exception(ScrotifyConstant.ACCOUNT_NOT_FOUND);
+		}
+		return accountsBySavings;
+
+	}
 }

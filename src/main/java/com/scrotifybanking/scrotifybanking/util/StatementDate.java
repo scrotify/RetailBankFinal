@@ -6,6 +6,10 @@ import java.util.Calendar;
  * The type Statement date.
  */
 public class StatementDate {
+	
+	private StatementDate() {
+		
+	}
 	/**
 	 * The Month int.
 	 */

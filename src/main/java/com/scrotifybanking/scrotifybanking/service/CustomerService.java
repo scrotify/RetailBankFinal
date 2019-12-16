@@ -5,7 +5,6 @@ import com.scrotifybanking.scrotifybanking.dto.CustomerRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.CustomerResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.LoginRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.LoginResponseDto;
-import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 
 /**

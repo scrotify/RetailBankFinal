@@ -1,7 +1,5 @@
 package com.scrotifybanking.scrotifybanking.dto;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * The type Fund request dto.
  */

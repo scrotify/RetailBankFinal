@@ -20,7 +20,7 @@ public class CustomerRequestDto {
 	private Long mobileNo;
 	private String city;
 	private String role;
-	private Double Salary;
+	private Double salary;
 
 	public String getName() {
 		return name;

@@ -45,7 +45,6 @@ public class CustomerController {
 	@Autowired
 	private TransactionService transactionService;
 
-
 	@GetMapping("/{custId}/accounts")
 	public ResponseEntity<AccountNumbersDto> getAllAccountNos(@PathVariable String custId) {
 
@@ -74,17 +73,17 @@ public class CustomerController {
 		return customerService.registerCustomer(customerRequestDto);
 	}
 
-
 	/**
 	 * Login customer response entity.
 	 *
 	 * @param loginDto the login dto
 	 * @return the response entity
-	 * @throws CustomerNotFoundException 
+	 * @throws CustomerNotFoundException
 	 */
 
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponseDto> loginCustomer(@RequestBody LoginRequestDto loginDto) throws CustomerNotFoundException {
+	public ResponseEntity<LoginResponseDto> loginCustomer(@RequestBody LoginRequestDto loginDto)
+			throws CustomerNotFoundException {
 		return new ResponseEntity<>(customerService.loginCustomer(loginDto), HttpStatus.OK);
 	}
 
@@ -99,11 +98,11 @@ public class CustomerController {
 	public ResponseEntity<AccountSummaryResponseDto> savingSummary(@PathVariable Long id) {
 		return new ResponseEntity<>(customerService.savingsAccountSummary(id), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{id}/mortgage")
 	public ResponseEntity<AccountSummaryResponseDto> mortgageSummary(@PathVariable Long id) {
 		return new ResponseEntity<>(customerService.mortgageAccountSummary(id), HttpStatus.OK);
- 
+
 	}
 
 }

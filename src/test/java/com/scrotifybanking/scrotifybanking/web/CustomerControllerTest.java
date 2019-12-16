@@ -118,6 +118,7 @@ public class CustomerControllerTest {
 		Assert.assertEquals(10L, accountNosDtos.getBody().getAccountNos().get(0).longValue());
 	}
 
+
 	/**
 	 * Monthly transactions test.
 	 *

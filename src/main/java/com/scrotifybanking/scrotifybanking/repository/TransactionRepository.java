@@ -21,8 +21,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 	 * @param accountNo the account no
 	 * @return the list
 	 */
-	List<Transaction> findByAccountNo(Long accountNo);
+	List<Transaction> findAccountByAccountNo(Long accountNo);
 
+	
 	/**
 	 * Find top 5 by account order by transaction id desc list.
 	 *
