@@ -18,6 +18,7 @@ import com.scrotifybanking.scrotifybanking.dto.TransactionDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
+import com.scrotifybanking.scrotifybanking.exception.CustomException;
 import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.CustomerRepository;
@@ -165,11 +166,15 @@ public class CustomerServiceImpl implements CustomerService {
 		Optional<Customer> customer = customerRepository.findByCustomerId(id);
 		Optional<Account> account = accountRepository.findByCustomerAndAccountType(customer,
 				ScrotifyConstant.MORTGAGE_ACCOUNT_MESSAGE);
-		List<Transaction> transactions = transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(account);
+		
+		if (account.isPresent()) {
+			List<Transaction> transactions = transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(account);
 		List<TransactionDto> listTransaction = new ArrayList<>();
-		if (account.isPresent() && customer.isPresent()) {
+		if (customer.isPresent()) {
 			accountSummaryResponseDto.setAccountNumber(account.get().getAccountNo());
 			accountSummaryResponseDto.setBalance(account.get().getAvailableBalance());
+			accountSummaryResponseDto.setAccountStatus(account.get().getAccountStatus());
+			accountSummaryResponseDto.setAccountType(account.get().getAccountType());
 			accountSummaryResponseDto.setName(customer.get().getCustomerName());
 			accountSummaryResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
 			accountSummaryResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
@@ -185,6 +190,9 @@ public class CustomerServiceImpl implements CustomerService {
 		} else {
 			accountSummaryResponseDto.setStatusCode(ScrotifyConstant.NOT_FOUND_CODE);
 			accountSummaryResponseDto.setMessage(ScrotifyConstant.INVALID_MESSAGE);
+		}
+		} else {
+			throw new CustomException("Account is not avaialble in transactions");
 		}
 		return accountSummaryResponseDto;
 	}

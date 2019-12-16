@@ -46,7 +46,7 @@ public final class ScrotifyConstant {
 	/**
 	 * The constant ACCOUNT_TYPE.
 	 */
-	public static final String ACCOUNT_TYPE = "Saving";
+	public static final String ACCOUNT_TYPE = "Savings";
 	/**
 	 * The constant FUND_TRANSFER_FAILED.
 	 */

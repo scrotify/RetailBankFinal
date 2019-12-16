@@ -2,7 +2,12 @@ package com.scrotifybanking.scrotifybanking.exception;
 
 public class CustomException extends RuntimeException {
 
-    public CustomException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public CustomException() {
         super();
     }
 

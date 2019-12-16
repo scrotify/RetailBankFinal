@@ -5,6 +5,7 @@ import java.util.List;
 import com.scrotifybanking.scrotifybanking.dto.AccountDto;
 import com.scrotifybanking.scrotifybanking.dto.AccountResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.MortgageTransferDto;
+import com.scrotifybanking.scrotifybanking.dto.SearchSavingsAccountResponseDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 
@@ -28,5 +29,6 @@ public interface AccountService {
 	public AccountDto findByAccountNumber(Long accountNumber);
 
 	public List<MortgageTransferDto> findAllByCustomerNumber(Long customerNumber);
-
+	
+	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo);
 }

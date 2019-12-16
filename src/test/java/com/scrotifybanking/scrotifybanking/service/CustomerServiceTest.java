@@ -23,6 +23,7 @@ import com.scrotifybanking.scrotifybanking.dto.TransactionDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
 import com.scrotifybanking.scrotifybanking.entity.Transaction;
+import com.scrotifybanking.scrotifybanking.exception.CustomException;
 import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.CustomerRepository;
@@ -274,15 +275,55 @@ public class CustomerServiceTest {
 		transactionList.add(transaction);
 
 		Mockito.when(customerRepository.findByCustomerId(1000L)).thenReturn(Optional.of(customer));
-		Mockito.when(accountRepository.findByCustomer(Optional.of(customer))).thenReturn(Optional.of(account));
+		Mockito.when(accountRepository.findByCustomerAndAccountType(Optional.of(customer), "Mortgage")).thenReturn(Optional.of(account));
 		Mockito.when(transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(Optional.of(account)))
 				.thenReturn(transactionList);
 		AccountSummaryResponseDto result = customerServiceImpl.mortgageAccountSummary(1000L);
 
 		assertEquals(ScrotifyConstant.SUCCESS_MESSAGE, result.getMessage());
 	}
-
+	
 	@Test
+	public void testSavingSummary() {
+
+		AccountSummaryResponseDto accountSummaryResponseDto = new AccountSummaryResponseDto();
+		accountSummaryResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
+		accountSummaryResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
+		accountSummaryResponseDto.setAccountNumber(10001L);
+		accountSummaryResponseDto.setBalance(3754.0);
+		accountSummaryResponseDto.setName("Sam");
+
+		Customer customer = new Customer();
+		customer.setCustomerId(1000L);
+
+		Account account = new Account();
+		account.setCustomer(customer);
+
+		TransactionDto transactionDto = new TransactionDto();
+		transactionDto.setAmount(45334.0);
+		transactionDto.setPayeeNo(10001L);
+		transactionDto.setTransactionDate(LocalDate.parse("2000-12-19"));
+		transactionDto.setTransactionType("Debit");
+
+		Transaction transaction = new Transaction();
+		transaction.setAmount(transactionDto.getAmount());
+		transaction.setPayeeNo(transactionDto.getPayeeNo());
+		transaction.setTransactionDate(transactionDto.getTransactionDate());
+		transaction.setTransactionType(transactionDto.getTransactionType());
+
+		List<Transaction> transactionList = new ArrayList<>();
+		transactionList.add(transaction);
+
+		Mockito.when(customerRepository.findByCustomerId(1000L)).thenReturn(Optional.of(customer));
+		Mockito.when(accountRepository.findByCustomerAndAccountType(Optional.of(customer), "Savings")).thenReturn(Optional.of(account));
+		Mockito.when(transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(Optional.of(account)))
+				.thenReturn(transactionList);
+		AccountSummaryResponseDto result = customerServiceImpl.savingsAccountSummary(1000L);
+
+		assertEquals(ScrotifyConstant.SUCCESS_MESSAGE, result.getMessage());
+	}
+
+	@Test(expected = CustomException.class)
 	public void testLastTransactionForNegative() {
 
 		AccountSummaryResponseDto accountSummaryResponseDto = new AccountSummaryResponseDto();
@@ -319,7 +360,7 @@ public class CustomerServiceTest {
 				.thenReturn(transactionList);
 		AccountSummaryResponseDto result = customerServiceImpl.mortgageAccountSummary(1000L);
 
-		assertEquals(ScrotifyConstant.INVALID_MESSAGE, result.getMessage());
+		assertEquals("Account is not avaialble in transactions", result.getMessage());
 	}
 
 }

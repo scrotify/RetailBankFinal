@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
@@ -16,7 +17,6 @@ import com.scrotifybanking.scrotifybanking.entity.Transaction;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.TransactionRepository;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The type Transaction service.
@@ -41,8 +41,8 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public boolean checkMinimumBalance(Long custId, String accountStatus, String accountType, double amount) {
-		double existingAmount = accountRepository.findByAccountBalance(custId, accountStatus, accountType);
-		return (existingAmount > amount);
+		Double existingAmount = accountRepository.findByAccountBalance(custId, accountStatus, accountType);
+		return (existingAmount.doubleValue() > amount);
 	}
 
 	/**
@@ -57,18 +57,18 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public boolean checkManintenanceBalance(Long custId, String accountStatus, String accountType, double amount,
 			double maintainBalance) {
-		double existingAmount = accountRepository.findByAccountBalance(custId, accountStatus, accountType);
-		if (existingAmount > (maintainBalance + amount)) {
+		Double existingAmount = accountRepository.findByAccountBalance(custId, accountStatus, accountType);
+		if (existingAmount.doubleValue() > (maintainBalance + amount)) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	@Transactional
 	@Override
 	public ApiResponse transferFund(Long custId, String toAccountNo, double amount, String accountStatus,
 			String accountType) {
-		boolean moreFund = false;
 		ApiResponse response = new ApiResponse();
 		Account payeeAccount = null;
 		Optional<Account> accountOptional = accountRepository.findById(Long.parseLong(toAccountNo));
@@ -86,25 +86,18 @@ public class TransactionServiceImpl implements TransactionService {
 					payeeAccount.setAvailableBalance(payeeAccountBalance);
 				} else {
 					payeeAccount.setAvailableBalance(0D);
-					moreFund = true;
 				}
 			} else {
-		 		payeeAccountBalance = payeeAccountBalance + amount;
+				payeeAccountBalance = payeeAccountBalance + amount;
 				payeeAccount.setAvailableBalance(payeeAccountBalance);
-		    }
+			}
 			transaction(toAccountNo, amount, response, payeeAccount, customerAccount);
-			/*if (moreFund) {
-				customerAccount.setAvailableBalance(Math.abs(payeeAccountBalance));
-				transaction(String.valueOf(customerAccount.getAccountNo()),
-						payeeAccountBalance, response, customerAccount, payeeAccount);
-			}*/
 		}
 		return response;
 	}
 
-	private void transaction(String toAccountNo, double amount, ApiResponse response,
-							 Account payeeAccount,
-							 Account customerAccount) {
+	private void transaction(String toAccountNo, double amount, ApiResponse response, Account payeeAccount,
+			Account customerAccount) {
 		Transaction customertransaction = new Transaction();
 		customertransaction.setAccountNo(customerAccount);
 		customertransaction.setAmount(amount);

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,52 +28,50 @@ import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
  */
 @RestController
 @RequestMapping("/fund-transfer")
+@CrossOrigin
 public class FundTransferController {
 
-    @Autowired
-    private TransactionService transactionService;
+	@Autowired
+	private TransactionService transactionService;
 
-    @Autowired
-    private AccountService accountService;
+	@Autowired
+	private AccountService accountService;
 
-    /**
-     * Fund transfer response entity.
-     *
-     * @param custId         the cust id
-     * @param toAccountNo    the to account no
-     * @param fundRequestDto the fund request dto
-     * @return the response entity
-     */
-    @PostMapping
-    public ResponseEntity<ApiResponse> fundTransfer(@RequestBody @Valid FundRequestDto fundRequestDto) {
+	/**
+	 * Fund transfer response entity.
+	 *
+	 * @param custId         the cust id
+	 * @param toAccountNo    the to account no
+	 * @param fundRequestDto the fund request dto
+	 * @return the response entity
+	 */
+	@PostMapping
+	public ResponseEntity<ApiResponse> fundTransfer(@RequestBody @Valid FundRequestDto fundRequestDto) {
 
-        boolean checkMinimumBalance = transactionService.checkMinimumBalance(fundRequestDto.getCustId(),
-                ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE,
-                fundRequestDto.getAmount());
-        ApiResponse response = new ApiResponse();
-        response.setStatusCode(ScrotifyConstant.TRANSACTION_FAILED);
-        response.setMessage(ScrotifyConstant.FUND_TRANSFER_FAILED);
-        if (checkMinimumBalance) {
-            if (transactionService.checkManintenanceBalance(fundRequestDto.getCustId(),
-                    ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE,
-                    fundRequestDto.getAmount(), ScrotifyConstant.MINIMUM_BALANCE_MAINTAIN)) {
-                response = transactionService.transferFund(fundRequestDto.getCustId(), String.valueOf(fundRequestDto.getAccountNo()),
-                        fundRequestDto.getAmount(), ScrotifyConstant.ACCOUNT_ACTIVE_STATUS,
-                        ScrotifyConstant.ACCOUNT_TYPE);
-                response.setMessage(ScrotifyConstant.FUND_TRANSFER_SUCCESS);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                throw new CustomException(ScrotifyConstant.MINIMUM_BALANCE_FAILED);
-            }
-        } else {
-            throw new CustomException(ScrotifyConstant.MAINTAIN_BALANCE_FAILED);
-        }
-    }
+		boolean checkMinimumBalance = transactionService.checkMinimumBalance(fundRequestDto.getCustId(),
+				ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE, fundRequestDto.getAmount());
+		ApiResponse response = new ApiResponse();
+		response.setStatusCode(ScrotifyConstant.TRANSACTION_FAILED);
+		response.setMessage(ScrotifyConstant.FUND_TRANSFER_FAILED);
+		if (checkMinimumBalance) {
+			if (transactionService.checkManintenanceBalance(fundRequestDto.getCustId(),
+					ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE, fundRequestDto.getAmount(),
+					ScrotifyConstant.MINIMUM_BALANCE_MAINTAIN)) {
+				response = transactionService.transferFund(fundRequestDto.getCustId(),
+						String.valueOf(fundRequestDto.getAccountNo()), fundRequestDto.getAmount(),
+						ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE);
+				response.setMessage(ScrotifyConstant.FUND_TRANSFER_SUCCESS);
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			} else {
+				throw new CustomException(ScrotifyConstant.MINIMUM_BALANCE_FAILED);
+			}
+		} else {
+			throw new CustomException(ScrotifyConstant.MAINTAIN_BALANCE_FAILED);
+		}
+	}
 
-
-    @GetMapping("/{custId}")
-    public List<MortgageTransferDto> getMartgageAccounts(@PathVariable Long custId) {
-        return accountService.findAllByCustomerNumber(custId);
-    }
+	@GetMapping("/{custId}")
+	public List<MortgageTransferDto> getMartgageAccounts(@PathVariable Long custId) {
+		return accountService.findAllByCustomerNumber(custId);
+	}
 }
-

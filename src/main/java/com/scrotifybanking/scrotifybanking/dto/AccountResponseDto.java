@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 public class AccountResponseDto {
 	
+	private Long accountNo;
 	private String message;
 	private Integer statusCode;
 
