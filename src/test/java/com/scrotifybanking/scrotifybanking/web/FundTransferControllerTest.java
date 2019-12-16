@@ -1,15 +1,10 @@
 package com.scrotifybanking.scrotifybanking.web;
 
-import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
-import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
-import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
-import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
-import com.scrotifybanking.scrotifybanking.exception.CustomException;
+import com.scrotifybanking.scrotifybanking.dto.*;
 import com.scrotifybanking.scrotifybanking.service.AccountService;
 import com.scrotifybanking.scrotifybanking.service.TransactionService;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -45,34 +40,24 @@ public class FundTransferControllerTest {
      * The Transaction statement response dtos.
      */
 
-    /**
-     * Sets up.
-     */
-    @Before
-    public void setUp() {
-
-
-    }
 
     /**
      * Test fund transfer.
      *
      * @throws Exception the custom exception
      */
-    @Test (expected = CustomException.class)
+    @Test
     public void testFundTransferCheckMinimumFalse() throws Exception {
         FundRequestDto fundRequestDto = new FundRequestDto();
         fundRequestDto.setAmount(1000);
         fundRequestDto.setAccountNo(2L);
         fundRequestDto.setCustId(123456L);
-        Mockito.when(transactionService.checkMinimumBalance(anyLong(), anyString(), anyString(),
-                anyDouble())).thenReturn(new Boolean(true));
-//        Mockito.when(transactionService.checkMinimumBalance(anyLong(), anyString(), anyString(),
-//                anyDouble())).thenReturn(new Boolean(true));
-        Mockito.when(transactionService.checkManintenanceBalance(anyLong(), anyString(), anyString(),
-                anyDouble(), anyDouble())).thenReturn(true);
-        ResponseEntity<ApiResponse> response = fundTransferController.fundTransfer(fundRequestDto);
-        Assert.assertNotNull(response);
+        ApiResponse response = new ApiResponse();
+        response.setMessage("Success");
+        response.setStatusCode(200);
+        Mockito.when(transactionService.transferFund(any(), anyString(), anyString())).thenReturn(response);
+        ResponseEntity<ApiResponse> responseOutput = fundTransferController.fundTransfer(fundRequestDto);
+        Assert.assertNotNull(responseOutput);
     }
 
     /**
@@ -81,29 +66,12 @@ public class FundTransferControllerTest {
      * @throws Exception the exception
      */
     @Test
-    public void testFundTransferCheck() throws Exception {
+    public void testFundTransferCheck()  {
+        List<MortgageTransferDto> mortgageTransferDtos = new ArrayList<>();
 
-        FundRequestDto fundRequestDto = new FundRequestDto();
-        fundRequestDto.setAmount(1000);
-        fundRequestDto.setAccountNo(2L);
-        fundRequestDto.setCustId(123456L);
-        Mockito.when(
-                transactionService.checkMinimumBalance(fundRequestDto.getCustId(), ScrotifyConstant.ACCOUNT_ACTIVE_STATUS,
-                        ScrotifyConstant.ACCOUNT_TYPE, fundRequestDto.getAmount()))
-                .thenReturn(true);
-        Mockito.when(transactionService.checkManintenanceBalance(fundRequestDto.getCustId(),
-                ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE,
-                fundRequestDto.getAmount(), ScrotifyConstant.MINIMUM_BALANCE_MAINTAIN))
-                .thenReturn(true);
-        ApiResponse response = new ApiResponse();
-        response.setMessage("success");
-        response.setStatusCode(200);
-        Mockito.when(transactionService.transferFund(anyLong(), anyString(), anyDouble(), any(), any()))
-                .thenReturn(response);
-        ResponseEntity<ApiResponse> responseRes = fundTransferController.fundTransfer(fundRequestDto);
-        Assert.assertNotNull(responseRes);
-        Assert.assertNotNull(responseRes.getBody().getMessage());
-        Assert.assertNotNull(responseRes.getStatusCode());
-
+        Mockito.when(accountService.findAllByCustomerNumber(anyLong()))
+                .thenReturn(mortgageTransferDtos);
+        List<MortgageTransferDto> mortgageTransferDtosOutput = fundTransferController.getMartgageAccounts(200L);
+        Assert.assertNotNull(mortgageTransferDtosOutput);
     }
 }

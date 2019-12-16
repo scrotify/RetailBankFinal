@@ -26,7 +26,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	 * @return the double
 	 */
 	@Query("select acc.availableBalance from Account acc where acc.customer.customerId = :custId and acc.accountStatus = :accountStatus and acc.accountType = :accountType")
-	Double findByAccountBalance(@Param("custId") Long custId, @Param("accountStatus") String accountStatus,
+	Optional<Double> findByAccountBalance(@Param("custId") Long custId, @Param("accountStatus") String accountStatus,
 			@Param("accountType") String accountType);
 
 	/**
