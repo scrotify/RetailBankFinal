@@ -124,21 +124,21 @@ public class AccountServiceImpl implements AccountService {
 	 * savings accounts
 	 * 
 	 * @param accountNo
+	 * @return 
 	 * @return
 	 * @throws Exception 
 	 *
 	 */
 	@Override
 	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) throws Exception {
-		SearchSavingsAccountResponseDto searchSavingsAccountResponseDto = null;
-		Optional<Account> accountNumber = accountRepository.findByAccountNo(accountNo);
 		List<SearchSavingsAccountResponseDto> accountsBySavings = new ArrayList<>();
-		if (accountNumber.isPresent()) {
 			List<Account> accountList = accountRepository.getAccountsByPartialAccountNo("" + accountNo);
-			for (Account accounts : accountList) {
+			if(accountList!=null) {
+				if(accountList.get(0).getAccountNo()!=null) {
+			accountList.forEach(accounts -> {
 				Long customerId = accounts.getCustomer().getCustomerId();
 				Optional<Customer> customerDetails = customerRepository.findByCustomerId(customerId);
-				searchSavingsAccountResponseDto = new SearchSavingsAccountResponseDto();
+				SearchSavingsAccountResponseDto	searchSavingsAccountResponseDto = new SearchSavingsAccountResponseDto();
 				searchSavingsAccountResponseDto.setAccountNo(accounts.getAccountNo());
 				searchSavingsAccountResponseDto.setAccountType(accounts.getAccountType());
 				searchSavingsAccountResponseDto.setAvailableBalance(accounts.getAvailableBalance());
@@ -149,11 +149,9 @@ public class AccountServiceImpl implements AccountService {
 				searchSavingsAccountResponseDto.setCustomerAge(customerDetails.get().getCustomerAge());
 				searchSavingsAccountResponseDto.setCustomerCity(customerDetails.get().getCustomerCity());
 				accountsBySavings.add(searchSavingsAccountResponseDto);
-				return accountsBySavings;
+			});
 			}
-		} else {
-			throw new Exception(ScrotifyConstant.ACCOUNT_NOT_FOUND);
-		}
+			}
 		return accountsBySavings;
 
 	}
