@@ -43,7 +43,7 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void testSearchSavingsAccounts() {
+	public void testSearchSavingsAccounts() throws Exception {
 		List<SearchSavingsAccountResponseDto> search = new ArrayList<>();
 		search.add(searchSavingsAccountResponseDto);
 		Mockito.when(accountServiceImpl.searchSavingsAccounts(10001234L)).thenReturn(search);

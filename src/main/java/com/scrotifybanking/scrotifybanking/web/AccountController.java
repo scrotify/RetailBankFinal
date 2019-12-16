@@ -30,9 +30,10 @@ public class AccountController {
 	 *              savings accounts
 	 * @param accountNo
 	 * @return
+	 * @throws Exception 
 	 */
 	@GetMapping("{accountNumber}")
-	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) {
+	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) throws Exception {
 		return accountService.searchSavingsAccounts(accountNo);
 	}
 

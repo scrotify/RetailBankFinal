@@ -67,7 +67,7 @@ public class AccountServiceTest {
 	account.setCustomer(customer);
 	}
 	@Test
-	public void testSearchSavingsAccounts() {
+	public void testSearchSavingsAccounts() throws Exception {
 	List<SearchSavingsAccountResponseDto> search=new ArrayList<>();
 	search.add(searchSavingsAccountResponseDto);
 	List<Account> accounts=new ArrayList<>();

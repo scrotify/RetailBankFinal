@@ -125,49 +125,36 @@ public class AccountServiceImpl implements AccountService {
 	 * 
 	 * @param accountNo
 	 * @return
+	 * @throws Exception 
 	 *
 	 */
 	@Override
-	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) {
+	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) throws Exception {
 		SearchSavingsAccountResponseDto searchSavingsAccountResponseDto = null;
-
-		List<Account> accountList = accountRepository.getAccountsByPartialAccountNo("" + accountNo);
-
+		Optional<Account> accountNumber = accountRepository.findByAccountNo(accountNo);
 		List<SearchSavingsAccountResponseDto> accountsBySavings = new ArrayList<>();
-		if (accountList != null) {
+		if (accountNumber.isPresent()) {
+			List<Account> accountList = accountRepository.getAccountsByPartialAccountNo("" + accountNo);
 			for (Account accounts : accountList) {
-				String accountType = accounts.getAccountType();
-				if (accountType.equalsIgnoreCase("savings")) {
-					Long customerId = accounts.getCustomer().getCustomerId();
-					Optional<Customer> customerDetails = customerRepository.findByCustomerId(customerId);
-					searchSavingsAccountResponseDto = new SearchSavingsAccountResponseDto();
-					searchSavingsAccountResponseDto.setAccountNo(accounts.getAccountNo());
-					searchSavingsAccountResponseDto.setAccountType(accounts.getAccountType());
-					searchSavingsAccountResponseDto.setAvailableBalance(accounts.getAvailableBalance());
-					if (customerDetails.isPresent()) {
-						searchSavingsAccountResponseDto.setCustomerId(customerDetails.get().getCustomerId());
-						searchSavingsAccountResponseDto.setCustomerName(customerDetails.get().getCustomerName());
-						searchSavingsAccountResponseDto.setCustomerSalary(customerDetails.get().getCustomerSalary());
-						searchSavingsAccountResponseDto
-								.setCustomerMobileNo(customerDetails.get().getCustomerMobileNo());
-						searchSavingsAccountResponseDto.setCustomerAge(customerDetails.get().getCustomerAge());
-						searchSavingsAccountResponseDto.setCustomerCity(customerDetails.get().getCustomerCity());
-						accountsBySavings.add(searchSavingsAccountResponseDto);
-					}
-				} else {
-					ErrorResponse errorResponse = new ErrorResponse();
-					errorResponse.setMessage("there is savings account numbers present");
-					errorResponse.setStatusCode(404);
-				}
+				Long customerId = accounts.getCustomer().getCustomerId();
+				Optional<Customer> customerDetails = customerRepository.findByCustomerId(customerId);
+				searchSavingsAccountResponseDto = new SearchSavingsAccountResponseDto();
+				searchSavingsAccountResponseDto.setAccountNo(accounts.getAccountNo());
+				searchSavingsAccountResponseDto.setAccountType(accounts.getAccountType());
+				searchSavingsAccountResponseDto.setAvailableBalance(accounts.getAvailableBalance());
+				searchSavingsAccountResponseDto.setCustomerId(customerDetails.get().getCustomerId());
+				searchSavingsAccountResponseDto.setCustomerName(customerDetails.get().getCustomerName());
+				searchSavingsAccountResponseDto.setCustomerSalary(customerDetails.get().getCustomerSalary());
+				searchSavingsAccountResponseDto.setCustomerMobileNo(customerDetails.get().getCustomerMobileNo());
+				searchSavingsAccountResponseDto.setCustomerAge(customerDetails.get().getCustomerAge());
+				searchSavingsAccountResponseDto.setCustomerCity(customerDetails.get().getCustomerCity());
+				accountsBySavings.add(searchSavingsAccountResponseDto);
+				return accountsBySavings;
 			}
-
 		} else {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setMessage("there is no account numbers present");
-			errorResponse.setStatusCode(404);
+			throw new Exception(ScrotifyConstant.ACCOUNT_NOT_FOUND);
 		}
 		return accountsBySavings;
 
 	}
-
 }

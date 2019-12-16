@@ -123,6 +123,8 @@ public final class ScrotifyConstant {
 
 	public static final String MORTGAGE_ACCOUNT_TYPE = "Mortgage";
 
+	public static final String ACCOUNT_NOT_FOUND = "Account number not found";
+
 
 	private ScrotifyConstant() {
 

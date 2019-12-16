@@ -30,5 +30,5 @@ public interface AccountService {
 
 	public List<MortgageTransferDto> findAllByCustomerNumber(Long customerNumber);
 	
-	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo);
+	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) throws Exception;
 }
