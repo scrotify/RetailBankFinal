@@ -1,29 +1,17 @@
 package com.scrotifybanking.scrotifybanking.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 /**
  * The type Account nos dto.
  */
+@Setter
+@Getter
 public class AccountNumbersDto {
 
 	private List<Long> accountNos;
 
-	/**
-	 * Gets account nos.
-	 *
-	 * @return the account nos
-	 */
-	public List<Long> getAccountNos() {
-		return accountNos;
-	}
-
-	/**
-	 * Sets account nos.
-	 *
-	 * @param accountNos the account nos
-	 */
-	public void setAccountNos(List<Long> accountNos) {
-		this.accountNos = accountNos;
-	}
 }

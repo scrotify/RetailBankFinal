@@ -66,4 +66,93 @@ public class Customer implements Serializable {
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Account> accountList;
+
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
+	}
+
+	public String getCustomerPassword() {
+		return customerPassword;
+	}
+
+	public void setCustomerPassword(String customerPassword) {
+		this.customerPassword = customerPassword;
+	}
+
+	public LocalDate getCustomerDob() {
+		return customerDob;
+	}
+
+	public void setCustomerDob(LocalDate customerDob) {
+		this.customerDob = customerDob;
+	}
+
+	public Double getCustomerSalary() {
+		return customerSalary;
+	}
+
+	public void setCustomerSalary(Double customerSalary) {
+		this.customerSalary = customerSalary;
+	}
+
+	public Integer getCustomerAge() {
+		return customerAge;
+	}
+
+	public void setCustomerAge(Integer customerAge) {
+		this.customerAge = customerAge;
+	}
+
+	public String getCustomerRole() {
+		return customerRole;
+	}
+
+	public void setCustomerRole(String customerRole) {
+		this.customerRole = customerRole;
+	}
+
+	public Long getCustomerMobileNo() {
+		return customerMobileNo;
+	}
+
+	public void setCustomerMobileNo(Long customerMobileNo) {
+		this.customerMobileNo = customerMobileNo;
+	}
+
+	public String getCustomerCity() {
+		return customerCity;
+	}
+
+	public void setCustomerCity(String customerCity) {
+		this.customerCity = customerCity;
+	}
+
+	public List<Account> getAccountList() {
+		return accountList;
+	}
+
+	public void setAccountList(List<Account> accountList) {
+		this.accountList = accountList;
+	}
 }

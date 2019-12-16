@@ -80,21 +80,17 @@ public class CustomerControllerTest {
 	}
 
 	/**
-	 * Monthly transactions test.
+	 * Test get in valid cust.
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
-	public void monthlyTransactionsTest() throws Exception {
-
-		Mockito.when(transactionService.getTransactionStatement(transactionStatementDto,
-				ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE))
-				.thenReturn(transactionStatementResponseDtos);
-		List<TransactionStatementResponseDto> transactions = customerController
-				.getTransactionStatement(transactionStatementDto);
-
-		Assert.assertNotNull(transactions);
-
+	@Test(expected = CustomException.class)
+	public void testGetInValidCust() throws Exception {
+		String custId = "12345689";
+		List<Account> accounts = new ArrayList<>();
+		Mockito.when(accountRepository.findAllByAccountNotCustomer(anyLong(), anyString(), anyString()))
+				.thenThrow(CustomException.class);
+		customerController.getAllAccountNos(custId);
 	}
 
 	/**
@@ -123,87 +119,20 @@ public class CustomerControllerTest {
 	}
 
 	/**
-	 * Test get in valid cust.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test(expected = CustomException.class)
-	public void testGetInValidCust() throws Exception {
-		String custId = "12345689";
-		List<Account> accounts = new ArrayList<>();
-		Mockito.when(accountRepository.findAllByAccountNotCustomer(any(), any(), any()))
-				.thenThrow(Exception.class);
-		customerController.getAllAccountNos(custId);
-	}
-
-	/**
-	 * Test fund transfer.
-	 *
-	 * @throws Exception the custom exception
-	 */
-	@Test(expected = CustomException.class)
-	public void testFundTransferCheckMinimumFalse() throws Exception {
-		String custId = "123456";
-		String toAccountNo = "2";
-		FundRequestDto fundRequestDto = new FundRequestDto();
-		fundRequestDto.setAmount(1000);
-		// Mockito.when(transactionService.checkMinimumBalance(any(), any(), any(),
-		// any())).thenReturn(new Boolean(true));
-		// Mockito.when(transactionService.checkManintenanceBalance(any(), any(), any(),
-		// any(), any())).thenReturn(true);
-		//ResponseEntity<ApiResponse> response = customerController.fundTransfer(custId, toAccountNo, fundRequestDto);
-		//Assert.assertNotNull(response);
-	}
-
-	/**
-	 * Test fund transfer check maintain balance.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test(expected = CustomException.class)
-	public void testFundTransferCheckMaintainBalance() throws Exception {
-		String custId = "123456";
-		String toAccountNo = "2";
-		FundRequestDto fundRequestDto = new FundRequestDto();
-		fundRequestDto.setAmount(1000);
-		Mockito.when(
-				transactionService.checkMinimumBalance(Long.parseLong(custId), ScrotifyConstant.ACCOUNT_ACTIVE_STATUS,
-						ScrotifyConstant.ACCOUNT_TYPE, fundRequestDto.getAmount()))
-				.thenReturn(true);
-		// Mockito.when(transactionService.checkManintenanceBalance(any(), any(), any(),
-		// any(), any())).thenReturn(true);
-		//ResponseEntity<ApiResponse> response = customerController.fundTransfer(custId, toAccountNo, fundRequestDto);
-		//Assert.assertNotNull(response);
-	}
-
-	/**
-	 * Test fund transfer check.
+	 * Monthly transactions test.
 	 *
 	 * @throws Exception the exception
 	 */
 	@Test
-	public void testFundTransferCheck() throws Exception {
-		String custId = "123456";
-		String toAccountNo = "2";
-		FundRequestDto fundRequestDto = new FundRequestDto();
-		fundRequestDto.setAmount(1000);
-		Mockito.when(
-				transactionService.checkMinimumBalance(Long.parseLong(custId), ScrotifyConstant.ACCOUNT_ACTIVE_STATUS,
-						ScrotifyConstant.ACCOUNT_TYPE, fundRequestDto.getAmount()))
-				.thenReturn(true);
-		Mockito.when(transactionService.checkManintenanceBalance(Long.parseLong(custId),
-				ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE,
-				fundRequestDto.getAmount(), ScrotifyConstant.MINIMUM_BALANCE_MAINTAIN))
-				.thenReturn(true);
-		ApiResponse response = new ApiResponse();
-		response.setMessage("success");
-		response.setStatusCode(200);
-		Mockito.when(transactionService.transferFund(anyLong(), anyString(), anyDouble(), any(), any()))
-				.thenReturn(response);
-		//ResponseEntity<ApiResponse> responseRes = customerController.fundTransfer(custId, toAccountNo, fundRequestDto);
-		//Assert.assertNotNull(response);
-		//Assert.assertNotNull(response.getMessage());
-		//Assert.assertNotNull(response.getStatusCode());
+	public void monthlyTransactionsTest() throws Exception {
+
+		Mockito.when(transactionService.getTransactionStatement(transactionStatementDto,
+				ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE))
+				.thenReturn(transactionStatementResponseDtos);
+		List<TransactionStatementResponseDto> transactions = customerController
+				.getTransactionStatement(transactionStatementDto);
+
+		Assert.assertNotNull(transactions);
 
 	}
 

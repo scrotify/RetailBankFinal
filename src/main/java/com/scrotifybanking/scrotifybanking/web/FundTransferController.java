@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
 @RequestMapping("/fund-transfer")
 public class FundTransferController {
 
+    private static final Logger logger = LogManager.getLogger(FundTransferController.class);
     @Autowired
     private TransactionService transactionService;
 
@@ -38,14 +41,11 @@ public class FundTransferController {
     /**
      * Fund transfer response entity.
      *
-     * @param custId         the cust id
-     * @param toAccountNo    the to account no
      * @param fundRequestDto the fund request dto
      * @return the response entity
      */
     @PostMapping
-    public ResponseEntity<ApiResponse> fundTransfer(@RequestBody @Valid FundRequestDto fundRequestDto) {
-
+    public ResponseEntity<ApiResponse> fundTransfer(@RequestBody FundRequestDto fundRequestDto) {
         boolean checkMinimumBalance = transactionService.checkMinimumBalance(fundRequestDto.getCustId(),
                 ScrotifyConstant.ACCOUNT_ACTIVE_STATUS, ScrotifyConstant.ACCOUNT_TYPE,
                 fundRequestDto.getAmount());
@@ -70,6 +70,12 @@ public class FundTransferController {
     }
 
 
+    /**
+     * Gets martgage accounts.
+     *
+     * @param custId the cust id
+     * @return the martgage accounts
+     */
     @GetMapping("/{custId}")
     public List<MortgageTransferDto> getMartgageAccounts(@PathVariable Long custId) {
         return accountService.findAllByCustomerNumber(custId);
