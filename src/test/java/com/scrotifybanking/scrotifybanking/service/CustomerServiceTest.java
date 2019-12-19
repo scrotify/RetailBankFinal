@@ -355,7 +355,7 @@ public class CustomerServiceTest {
 		transactionList.add(transaction);
 
 		Mockito.when(customerRepository.findByCustomerId(1008L)).thenReturn(Optional.of(customer));
-		Mockito.when(accountRepository.findByCustomer(Optional.of(customer))).thenReturn(Optional.of(account));
+		Mockito.when(accountRepository.findByCustomer(customer)).thenReturn(Optional.of(account));
 		Mockito.when(transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(Optional.of(account)))
 				.thenReturn(transactionList);
 		AccountSummaryResponseDto result = customerServiceImpl.mortgageAccountSummary(1000L);

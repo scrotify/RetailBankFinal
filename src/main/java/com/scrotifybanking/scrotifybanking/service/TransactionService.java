@@ -1,10 +1,10 @@
 package com.scrotifybanking.scrotifybanking.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
 import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
+import com.scrotifybanking.scrotifybanking.dto.FundTransaferResponseDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
 
@@ -23,8 +23,7 @@ public interface TransactionService {
 	 * @param accountType   the account type
 	 * @return the api response
 	 */
-	public ApiResponse transferFund(FundRequestDto fundRequestDto, String accountStatus,
-									String accountType);
+	public ApiResponse transferFund(FundRequestDto fundRequestDto, String accountStatus, String accountType);
 
 	/**
 	 * Gets transaction statement.
@@ -37,4 +36,6 @@ public interface TransactionService {
 	 */
 	public List<TransactionStatementResponseDto> getTransactionStatement(
 			TransactionStatementDto transactionStatementDto, String accountStatus, String accountType) throws Exception;
+	
+	
 }

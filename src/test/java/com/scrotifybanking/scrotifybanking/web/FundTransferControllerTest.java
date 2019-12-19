@@ -1,9 +1,12 @@
 package com.scrotifybanking.scrotifybanking.web;
 
-import com.scrotifybanking.scrotifybanking.dto.*;
-import com.scrotifybanking.scrotifybanking.service.AccountService;
-import com.scrotifybanking.scrotifybanking.service.TransactionService;
-import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +16,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.*;
+import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
+import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
+import com.scrotifybanking.scrotifybanking.dto.MortgageTransferDto;
+import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
+import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
+import com.scrotifybanking.scrotifybanking.service.AccountService;
+import com.scrotifybanking.scrotifybanking.service.TransactionService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FundTransferControllerTest {
@@ -49,7 +55,7 @@ public class FundTransferControllerTest {
     @Test
     public void testFundTransferCheckMinimumFalse() throws Exception {
         FundRequestDto fundRequestDto = new FundRequestDto();
-        fundRequestDto.setAmount(1000);
+        fundRequestDto.setAmount(1000.22);
         fundRequestDto.setAccountNo(2L);
         fundRequestDto.setCustId(123456L);
         ApiResponse response = new ApiResponse();

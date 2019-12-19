@@ -27,7 +27,7 @@ public interface CustomerService {
 	 *
 	 * @param loginDto the login dto
 	 * @return the login response dto
-	 * @throws CustomerNotFoundException 
+	 * @throws CustomerNotFoundException
 	 */
 	public LoginResponseDto loginCustomer(LoginRequestDto loginDto) throws CustomerNotFoundException;
 

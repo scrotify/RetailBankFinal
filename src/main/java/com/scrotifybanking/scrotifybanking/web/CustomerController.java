@@ -38,10 +38,13 @@ public class CustomerController {
 
 	@Autowired
 	CustomerService customerService;
+	
 	@Autowired
 	CustomerRepository customerRepository;
+	
 	@Autowired
 	private AccountRepository accountRepository;
+	
 	@Autowired
 	private TransactionService transactionService;
 

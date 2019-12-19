@@ -19,7 +19,6 @@ import com.scrotifybanking.scrotifybanking.entity.Account;
 import com.scrotifybanking.scrotifybanking.entity.Customer;
 import com.scrotifybanking.scrotifybanking.exception.CustomException;
 import com.scrotifybanking.scrotifybanking.exception.CustomerNotFoundException;
-import com.scrotifybanking.scrotifybanking.exception.ErrorResponse;
 import com.scrotifybanking.scrotifybanking.repository.AccountRepository;
 import com.scrotifybanking.scrotifybanking.repository.CustomerRepository;
 import com.scrotifybanking.scrotifybanking.util.ScrotifyConstant;
@@ -124,34 +123,34 @@ public class AccountServiceImpl implements AccountService {
 	 * savings accounts
 	 * 
 	 * @param accountNo
-	 * @return 
 	 * @return
-	 * @throws Exception 
+	 * @return
+	 * @throws Exception
 	 *
 	 */
 	@Override
 	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) throws Exception {
 		List<SearchSavingsAccountResponseDto> accountsBySavings = new ArrayList<>();
-			List<Account> accountList = accountRepository.getAccountsByPartialAccountNo("" + accountNo);
-			if(accountList!=null) {
-				if(accountList.get(0).getAccountNo()!=null) {
-			accountList.forEach(accounts -> {
-				Long customerId = accounts.getCustomer().getCustomerId();
-				Optional<Customer> customerDetails = customerRepository.findByCustomerId(customerId);
-				SearchSavingsAccountResponseDto	searchSavingsAccountResponseDto = new SearchSavingsAccountResponseDto();
-				searchSavingsAccountResponseDto.setAccountNo(accounts.getAccountNo());
-				searchSavingsAccountResponseDto.setAccountType(accounts.getAccountType());
-				searchSavingsAccountResponseDto.setAvailableBalance(accounts.getAvailableBalance());
-				searchSavingsAccountResponseDto.setCustomerId(customerDetails.get().getCustomerId());
-				searchSavingsAccountResponseDto.setCustomerName(customerDetails.get().getCustomerName());
-				searchSavingsAccountResponseDto.setCustomerSalary(customerDetails.get().getCustomerSalary());
-				searchSavingsAccountResponseDto.setCustomerMobileNo(customerDetails.get().getCustomerMobileNo());
-				searchSavingsAccountResponseDto.setCustomerAge(customerDetails.get().getCustomerAge());
-				searchSavingsAccountResponseDto.setCustomerCity(customerDetails.get().getCustomerCity());
-				accountsBySavings.add(searchSavingsAccountResponseDto);
-			});
+		List<Account> accountList = accountRepository.getAccountsByPartialAccountNo("" + accountNo);
+		if (accountList != null) {
+			if (accountList.get(0).getAccountNo() != null) {
+				accountList.forEach(accounts -> {
+					Long customerId = accounts.getCustomer().getCustomerId();
+					Optional<Customer> customerDetails = customerRepository.findByCustomerId(customerId);
+					SearchSavingsAccountResponseDto searchSavingsAccountResponseDto = new SearchSavingsAccountResponseDto();
+					searchSavingsAccountResponseDto.setAccountNo(accounts.getAccountNo());
+					searchSavingsAccountResponseDto.setAccountType(accounts.getAccountType());
+					searchSavingsAccountResponseDto.setAvailableBalance(accounts.getAvailableBalance());
+					searchSavingsAccountResponseDto.setCustomerId(customerDetails.get().getCustomerId());
+					searchSavingsAccountResponseDto.setCustomerName(customerDetails.get().getCustomerName());
+					searchSavingsAccountResponseDto.setCustomerSalary(customerDetails.get().getCustomerSalary());
+					searchSavingsAccountResponseDto.setCustomerMobileNo(customerDetails.get().getCustomerMobileNo());
+					searchSavingsAccountResponseDto.setCustomerAge(customerDetails.get().getCustomerAge());
+					searchSavingsAccountResponseDto.setCustomerCity(customerDetails.get().getCustomerCity());
+					accountsBySavings.add(searchSavingsAccountResponseDto);
+				});
 			}
-			}
+		}
 		return accountsBySavings;
 
 	}

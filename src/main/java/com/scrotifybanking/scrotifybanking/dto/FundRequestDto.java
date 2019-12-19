@@ -5,15 +5,16 @@ package com.scrotifybanking.scrotifybanking.dto;
  */
 public class FundRequestDto {
 
-	private double amount;
+	
 	private Long custId;
 	private Long accountNo;
+	private Double amount;
 
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -32,4 +33,7 @@ public class FundRequestDto {
 	public void setAccountNo(Long accountNo) {
 		this.accountNo = accountNo;
 	}
+
+	
+	
 }

@@ -77,14 +77,13 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	 * @param customer the customer
 	 * @return the optional
 	 */
-	Optional<Account> findByCustomer(Optional<Customer> customer);
+	Optional<Account> findByCustomer(Customer customer);
 
 	Optional<Account> findByCustomerAndAccountType(Optional<Customer> customer, String string);
 
 	Optional<List<Account>> findAllByCustomerCustomerId(Long customerId);
-	
-	
-	@Query(nativeQuery = true, value = "select * from account ac where ac.customer_id not in (select a.customer_id from account a where a.account_type='mortgage') and CONCAT(ac.account_no, '') Like %:accountNo%")
-	List<Account> getAccountsByPartialAccountNo(@Param("accountNo")  String accountNo);
 
+	@Query(nativeQuery = true, value = "select * from account ac where ac.customer_id not in (select a.customer_id from account a where a.account_type='mortgage') and CONCAT(ac.account_no, '') Like %:accountNo%")
+	List<Account> getAccountsByPartialAccountNo(@Param("accountNo") String accountNo);
+	Optional<Account> findByCustomerCustomerIdAndAccountNo(Long customerId, Long accountNo);
 }

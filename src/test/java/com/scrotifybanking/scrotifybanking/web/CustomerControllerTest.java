@@ -1,7 +1,6 @@
 package com.scrotifybanking.scrotifybanking.web;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -19,8 +18,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import com.scrotifybanking.scrotifybanking.dto.AccountNumbersDto;
-import com.scrotifybanking.scrotifybanking.dto.ApiResponse;
-import com.scrotifybanking.scrotifybanking.dto.FundRequestDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementDto;
 import com.scrotifybanking.scrotifybanking.dto.TransactionStatementResponseDto;
 import com.scrotifybanking.scrotifybanking.entity.Account;
@@ -87,7 +84,6 @@ public class CustomerControllerTest {
 	@Test(expected = CustomException.class)
 	public void testGetInValidCust() throws Exception {
 		String custId = "12345689";
-		List<Account> accounts = new ArrayList<>();
 		Mockito.when(accountRepository.findAllByAccountNotCustomer(anyLong(), anyString(), anyString()))
 				.thenThrow(CustomException.class);
 		customerController.getAllAccountNos(custId);

@@ -166,31 +166,31 @@ public class CustomerServiceImpl implements CustomerService {
 		Optional<Customer> customer = customerRepository.findByCustomerId(id);
 		Optional<Account> account = accountRepository.findByCustomerAndAccountType(customer,
 				ScrotifyConstant.MORTGAGE_ACCOUNT_MESSAGE);
-		
+
 		if (account.isPresent()) {
 			List<Transaction> transactions = transactionRepository.findTop5ByAccountNoOrderByTransactionIdDesc(account);
-		List<TransactionDto> listTransaction = new ArrayList<>();
-		if (customer.isPresent()) {
-			accountSummaryResponseDto.setAccountNumber(account.get().getAccountNo());
-			accountSummaryResponseDto.setBalance(account.get().getAvailableBalance());
-			accountSummaryResponseDto.setAccountStatus(account.get().getAccountStatus());
-			accountSummaryResponseDto.setAccountType(account.get().getAccountType());
-			accountSummaryResponseDto.setName(customer.get().getCustomerName());
-			accountSummaryResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
-			accountSummaryResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
-			for (Transaction transaction : transactions) {
-				TransactionDto transactionDto = new TransactionDto();
-				transactionDto.setAmount(transaction.getAmount());
-				transactionDto.setTransactionDate(transaction.getTransactionDate());
-				transactionDto.setTransactionType(transaction.getTransactionType());
-				transactionDto.setPayeeNo(transaction.getPayeeNo());
-				listTransaction.add(transactionDto);
+			List<TransactionDto> listTransaction = new ArrayList<>();
+			if (customer.isPresent()) {
+				accountSummaryResponseDto.setAccountNumber(account.get().getAccountNo());
+				accountSummaryResponseDto.setBalance(account.get().getAvailableBalance());
+				accountSummaryResponseDto.setAccountStatus(account.get().getAccountStatus());
+				accountSummaryResponseDto.setAccountType(account.get().getAccountType());
+				accountSummaryResponseDto.setName(customer.get().getCustomerName());
+				accountSummaryResponseDto.setMessage(ScrotifyConstant.SUCCESS_MESSAGE);
+				accountSummaryResponseDto.setStatusCode(ScrotifyConstant.SUCCESS_CODE);
+				for (Transaction transaction : transactions) {
+					TransactionDto transactionDto = new TransactionDto();
+					transactionDto.setAmount(transaction.getAmount());
+					transactionDto.setTransactionDate(transaction.getTransactionDate());
+					transactionDto.setTransactionType(transaction.getTransactionType());
+					transactionDto.setPayeeNo(transaction.getPayeeNo());
+					listTransaction.add(transactionDto);
+				}
+				accountSummaryResponseDto.setTransactions(listTransaction);
+			} else {
+				accountSummaryResponseDto.setStatusCode(ScrotifyConstant.NOT_FOUND_CODE);
+				accountSummaryResponseDto.setMessage(ScrotifyConstant.INVALID_MESSAGE);
 			}
-			accountSummaryResponseDto.setTransactions(listTransaction);
-		} else {
-			accountSummaryResponseDto.setStatusCode(ScrotifyConstant.NOT_FOUND_CODE);
-			accountSummaryResponseDto.setMessage(ScrotifyConstant.INVALID_MESSAGE);
-		}
 		} else {
 			throw new CustomException("Account is not avaialble in transactions");
 		}

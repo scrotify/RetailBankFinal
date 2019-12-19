@@ -23,12 +23,12 @@ public interface AccountService {
 	 * @return the list
 	 */
 	List<Account> findAllByAccountNotCustomer(String custId, String accountStatus, String accountType);
-	
+
 	AccountResponseDto createMortgageAccount(Long id) throws CustomerNotFoundException;
 
 	public AccountDto findByAccountNumber(Long accountNumber);
 
 	public List<MortgageTransferDto> findAllByCustomerNumber(Long customerNumber);
-	
+
 	public List<SearchSavingsAccountResponseDto> searchSavingsAccounts(Long accountNo) throws Exception;
 }

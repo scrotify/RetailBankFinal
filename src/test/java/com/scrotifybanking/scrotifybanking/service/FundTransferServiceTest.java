@@ -70,7 +70,7 @@ public class FundTransferServiceTest {
 		FundRequestDto fundRequestDto = new FundRequestDto();
 		fundRequestDto.setCustId(2000L);
 		fundRequestDto.setAccountNo(3000L);
-		fundRequestDto.setAmount(5000);
+		fundRequestDto.setAmount(5000.22);
 		ApiResponse apiResponse = transactionService.transferFund(fundRequestDto, "Active", "Saving");
 		Assert.assertNotNull(apiResponse);
 		Assert.assertNotNull(apiResponse.getStatusCode());
@@ -109,7 +109,7 @@ public class FundTransferServiceTest {
 		FundRequestDto fundRequestDto = new FundRequestDto();
 		fundRequestDto.setCustId(2000L);
 		fundRequestDto.setAccountNo(3000L);
-		fundRequestDto.setAmount(100);
+		fundRequestDto.setAmount(100.22);
 		ApiResponse apiResponse = transactionService.transferFund(fundRequestDto, "Active", "Saving");
 		Assert.assertNotNull(apiResponse);
 		Assert.assertNotNull(apiResponse.getStatusCode());

@@ -83,7 +83,7 @@ public final class ScrotifyConstant {
 	public static final String FAILURE_MESSAGE = "Registration is not appicable";
 
 	/**
-	 * The constant NOT_FOUND_MESSAGE.
+	 * The constant INVALID_MESSAGE.
 	 */
 	public static final String INVALID_MESSAGE = "Invalid Username or Password";
 	/**
@@ -115,16 +115,27 @@ public final class ScrotifyConstant {
 	 */
 	public static final int CREATED_CODE = 201;
 	/**
-	 * The constant ACCOUNT_CREATED_MESSAGE.
+	 * The constant ADMIN_MESSAGE.
 	 */
 	public static final String ADMIN_MESSAGE = "admin";
-	
-	
-
+	/**
+	 * The constant MORTGAGE_ACCOUNT_TYPE.
+	 */
 	public static final String MORTGAGE_ACCOUNT_TYPE = "Mortgage";
-
+	/**
+	 * The constant ACCOUNT_NOT_FOUND.
+	 */
 	public static final String ACCOUNT_NOT_FOUND = "Account number not found";
+	/**
+	 * The constant BENEFICIARY_MESSAGE.
+	 */
+	public static final String BENEFICIARY_MESSAGE = "Beneficiary Account created successfully";
+	/**
+	 * The constant BENEFICIARY_MESSAGE.
+	 */
+	public static final String BENEFICIARY_EXCEED = "Number of beneficiary account exceeded for your account";
 
+	public static final String BANK_DETAILS_NOT_FOUND ="Bank Details Not Found";
 
 	private ScrotifyConstant() {
 
