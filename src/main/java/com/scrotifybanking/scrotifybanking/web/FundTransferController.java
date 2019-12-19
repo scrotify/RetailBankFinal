@@ -89,6 +89,10 @@ public class FundTransferController {
 		return accountService.findAllByCustomerNumber(custId);
 	}
 
+	/** This method is used to get all the beneficiaries from payee service, internally we used rest template for that.
+	 * @param customerId
+	 * @return
+	 */
 	@GetMapping("/customers/beneficiaries/{customerId}")
 	public ResponseEntity<List<ListOfPayeeResponseDto>> getAllBeneficiaries(Long customerId) {
 		final String uri = "http://localhost:8082/payee/beneficiaries/" + customerId;
